@@ -131,6 +131,31 @@ def verbose_output(true_string="", false_string=""):
    elif false_string != "": # If VERBOSE is False and message is not empty
       print(false_string) # Print the message
 
+def save_json(obj, path: str):
+   """
+   Save Python object as JSON file.
+   Converts sets into lists to avoid serialization errors.
+   Creates the parent directory if it does not exist.
+
+   :param obj: Python object to save (dict, list, etc.)
+   :param path: Full path to save the file
+   :return: None
+   """
+
+   def default_serializer(o): # Custom serializer for non-serializable objects
+      if isinstance(o, set): # Convert sets to lists
+         return list(o) # Convert set to list
+      if isinstance(o, (dt.datetime, dt.date)): # Convert datetime/date to ISO string
+         return o.isoformat() # Return ISO string
+      raise TypeError(f"Object of type {o.__class__.__name__} is not JSON serializable") # Raise error for unsupported types
+
+   os.makedirs(os.path.dirname(path), exist_ok=True) # Ensure directory exists
+
+   with open(path, "w", encoding="utf-8") as f: # Write JSON with indentation
+      json.dump(obj, f, ensure_ascii=False, indent=3, default=default_serializer) # Custom serializer
+
+   verbose_output(f"Saved JSON → {path}")
+
 def main():
    """"
    Main function to parse arguments, fetch data, and generate reports.
