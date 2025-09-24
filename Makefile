@@ -4,15 +4,15 @@ PYTHON := $(VENV)/bin/python3
 PIP := $(VENV)/bin/pip
 
 # Default date range (can be overridden from CLI)
-START ?= 2000-01-01
-END ?= $(shell date +%Y-%m-%d)
+SINCE ?= 2000-01-01
+UNTIL ?= $(shell date +%Y-%m-%d)
 
 # Main target that runs the scripts
 all: run
 
 # Main Scripts:
 run: $(VENV)
-	time $(PYTHON) ./main.py --since $(START) --until $(END)
+	time $(PYTHON) ./main.py --since $(SINCE) --until $(UNTIL)
 
 # Setup Virtual Environment and Install Dependencies
 $(VENV):

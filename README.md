@@ -204,10 +204,20 @@ By keeping this updated, you ensure that all contributions are correctly attribu
 
 ## Usage
 
-In order to run the project, run the following command:
+Run the `main.py` file with `make`:
 
 ```bash
-make run
+make run SINCE=2024-01-01 UNTIL=2024-12-31
+```
+
+If no dates are provided (by simply running `make`), it defaults to fetching all data from `2000-01-01` to the current date. This is adjustable in the `Makefile`, at the `SINCE` and `UNTIL` variables.
+
+Or manually:
+
+```bash
+source venv/bin/activate # On Linux/macOS
+venv\Scripts\activate # On Windows
+python3 main.py --since 2024-01-01 --until 2024-12-31
 ```
 
 ## Results - Optional
