@@ -50,7 +50,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [Usage](#usage)
   - [Results](#results)
     - [Example structure](#example-structure)
-  - [Convert QMD to other formats](#convert-qmd-to-other-formats)
+    - [Convert QMD to other formats](#convert-qmd-to-other-formats)
   - [Contributing](#contributing)
   - [Collaborators](#collaborators)
   - [License](#license)
@@ -245,7 +245,7 @@ reports/YYYY-MM-DD_YYYY-MM-DD/Author_Name/
 └── Author_Name_YYYY-MM-DD_YYYY-MM-DD.docx
 ```
 
-## Convert QMD to other formats
+### Convert QMD to other formats
 
 If you need to modify the `.qmd` report file, then you need to manually convert it to other formats, so the changes are reflected.
 
