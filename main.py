@@ -555,6 +555,22 @@ def dedupe_commits(commits_list):
       
    return deduped # Return deduplicated commits
 
+def save_quarto_markdown_content(content: str, path: str):
+   """
+   Save markdown content to a .qmd file.
+
+   :param content: Markdown content as string
+   :param path: Full path to save the .qmd file
+   :return: None
+   """
+
+   os.makedirs(os.path.dirname(path), exist_ok=True) # Ensure directory exists
+
+   with open(path, "w", encoding="utf-8") as f: # Write content to file
+      f.write(content) # Write content
+
+   verbose_output(f"Saved Quarto markdown → {path}")
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
