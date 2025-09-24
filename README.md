@@ -44,6 +44,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Clone the repository](#clone-the-repository)
     - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
     - [Install dependencies](#install-dependencies)
+    - [Environment Variables configuration](#environment-variables-configuration)
     - [Dataset - Optional](#dataset---optional)
   - [Usage](#usage)
   - [Results - Optional](#results---optional)
@@ -155,6 +156,16 @@ source venv/bin/activate # On Linux/macOS
 venv\Scripts\activate # On Windows
 pip install -r requirements.txt
 ```
+
+### Environment Variables configuration
+
+Copy the `.env-example` file in the project root, naming it `.env`, and add your GitHub Personal Access Token (Classic):
+
+```env
+GITHUB_CLASSIC_TOKEN=your_personal_access_token
+```
+
+Only **classic tokens** are supported (with `repo` and `read:org` scopes). You can generate a new classic token in your GitHub account settings under Developer Settings > Personal Access Tokens > Tokens (classic), or by the following link: [Generate new token (classic)](https://github.com/settings/tokens)
 
 ### Dataset - Optional
 

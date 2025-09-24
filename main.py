@@ -35,11 +35,11 @@ USER_MAP = { # Dictionary mapping full names to all possible usernames
 
 load_dotenv() # Load .env variables
 TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub API with repo scope (https://github.com/settings/tokens)
-OWNER = "ORG_NAME_HERE"  # Replace with the GitHub organization or username
+OWNER = "ORG_NAME_HERE" # Replace with the GitHub organization or username
 REPOS = {
-   "PROJECT_NAME_HERE": [  # Replace with your project/group name. Each project can have one or more repositories, like backend/frontend/etc.
-      "REPO_BACKEND_NAME",  # Replace with the backend repo name, for example
-      "REPO_FRONTEND_NAME"  # Replace with the frontend repo name, for example
+   "PROJECT_NAME_HERE": [ # Replace with your project/group name. Each project can have one or more repositories, like backend/frontend/etc.
+      "FIRST_REPO_HERE", # Replace with the backend repo name, for example
+      "SECOND_REPO_HERE" # Replace with the frontend repo name, for example
    ]
 } # List of repositories to process
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
