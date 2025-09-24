@@ -117,6 +117,20 @@ def to_github_time_string(d: dt.datetime) -> str:
 
    return d.isoformat(timespec="seconds") # Return ISO string without microseconds
 
+def verbose_output(true_string="", false_string=""):
+   """
+   Outputs a message if the VERBOSE constant is True.
+
+   :param true_string: Message to show if VERBOSE is True
+   :param false_string: Message to show if VERBOSE is False
+   :return: None
+   """
+   
+   if VERBOSE and true_string != "": # If VERBOSE is True and message is not empty
+      print(true_string) # Print the message
+   elif false_string != "": # If VERBOSE is False and message is not empty
+      print(false_string) # Print the message
+
 def main():
    """"
    Main function to parse arguments, fetch data, and generate reports.
