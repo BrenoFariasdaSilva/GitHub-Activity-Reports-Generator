@@ -3,6 +3,10 @@ GitHub activity scraper (date range)
 Collects issues, sub-issues, PRs and commits for a repository within a date range,
 saves raw JSON responses to ./responses/, and generates a markdown report.
 Follows the style and structure of the provided template.
+
+@TODO: Not re-do requests every time, but incremental ones.
+@TODO: GraphQL for /Projects content
+@TODO: Automate USER_MAP dictionary update
 """
 
 # Library imports
