@@ -597,6 +597,112 @@ def render_quarto_report(input_file: str, output_formats=["pdf", "docx"]):
       except Exception as e: # On exception
          print(f"{BackgroundColors.RED}Error running Quarto ({file_format}): {e}{Style.RESET_ALL}")
 
+def generate_quarto_report_per_author(start, end, issues_info, repo_commits, output_formats=["pdf", "docx"]):
+   """
+   Generate one Quarto markdown report per author, grouping issues and commits.
+   Saves files like report_<author>.qmd
+
+   :param start: Start datetime
+   :param end: End datetime
+   :param issues_info: List of issue info dicts (from gather_activity_for_issue)
+   :param repo_commits: List of repo commit objects (from fetch_repo_commits_in_range)
+   :param output_formats: List of output formats for Quarto (e.g. ["pdf", "docx"])
+   :return: Dict mapping author to report content
+   """
+
+   start_s = start.strftime("%Y-%m-%d") # Format start date
+   end_s = end.strftime("%Y-%m-%d") # Format end date
+
+   author_data = {} # Data grouped by author
+
+   for info in issues_info: # Iterate over issues
+      issue_author = get_author_name(info["issue"]) # Get issue author
+      author_data.setdefault(issue_author, {"issues": [], "commits": []}) # Initialize if not present
+      author_data[issue_author]["issues"].append(info) # Add issue to author's list
+
+      for commit in info.get("commits", []): # Iterate over commits linked to the issue
+         if get_author_name(commit) == issue_author: # If commit author matches issue author
+            author_data[issue_author]["commits"].append(commit) # Add commit to author's list
+
+   for commit in repo_commits: # Iterate over standalone repo commits
+      author = get_author_name(commit) # Get commit author
+      author_data.setdefault(author, {"issues": [], "commits": []}) # Initialize if not present
+      author_data[author]["commits"].append(commit) # Add commit to author's list
+
+   reports = {} # Collected reports
+
+   for author, data in author_data.items(): # Iterate over authors
+      md = "" # Start of markdown content
+
+      md += "---\n" # YAML front matter start
+      md += f"title: \"Relatório de {OWNER}\"\n" # Title
+      md += f"author: \"{author}\"\n" # Author
+      md += f"date: {end_s}\n" # Only one valid date for Pandoc
+      md += f"period: \"{start_s} → {end_s}\"\n" # Custom field
+      md += "format:\n" # Output formats
+      for fmt in output_formats: # Iterate over formats
+         md += f"   {fmt}: default\n" # Default format
+      md += "---\n\n" # YAML front matter end
+
+      md += f"**Período:** {start_s} → {end_s}\n\n" # Date range
+
+      md += "**Repositórios:** " + ", ".join([f"[{repo}](https://github.com/{OWNER}/{repo})" for org, repos in REPOS.items() for repo in repos]) + "\n\n" # Repositories with markdown links
+
+      md += f"- Issues do autor: {len(data['issues'])}\n" # Number of issues
+      md += f"- Commits do autor: {len(data['commits'])}\n\n" # Number of commits
+
+      for info in data["issues"]: # Iterate over issues
+         issue = info["issue"] # Issue object
+         md += f"## Issue #{issue['number']}: [{issue.get('title','(no title)')}]({issue.get('html_url')})\n" # Issue header
+         md += f"- Estado: {issue.get('state')}\n" # Issue state
+         md += f"- Criado: {issue.get('created_at')}\n" # Created at
+         md += f"- Atualizado: {issue.get('updated_at')}\n" # Updated at
+         md += f"- URL: [{issue.get('html_url')}]({issue.get('html_url')})\n\n" # Issue URL
+
+         if info.get("pr_numbers"): # If there are PRs
+            md += "### PRs Relacionados\n" # PRs header
+            repo_url = issue.get("repository_url", "") # Repository URL
+            repo_name = repo_url.split("/")[-1] if repo_url else repo_url # Extract repo name
+            for prn in sorted(info["pr_numbers"]): # Iterate over PR numbers
+               md += f"- [PR #{prn}](https://github.com/{OWNER}/{repo_name}/pull/{prn})\n" # PR link
+            md += "\n" # Newline
+
+         commits = [c for c in dedupe_commits(info.get("commits", [])) if get_author_name(c) == author] # Commits by this author
+         if commits: # If there are commits
+            md += "### Commits relacionados a esta issue\n" # Commits header
+            for commit in commits: # Iterate over commits
+               sha = commit.get("sha", "")[:7] # Short SHA
+               msg = (commit.get("msg") or "").splitlines()[0] # First line of message
+               date = commit.get("date", "unknown") # Commit date
+               url = commit.get("url", "") # Commit URL
+               md += f"- `{sha}` {msg} ({date}) [{url}]({url})\n" # Commit line
+            md += "\n" # Newline
+
+      if data["commits"]: # If there are standalone commits
+         md += "## Commits no intervalo (não necessariamente vinculados a issues)\n" # Commits header
+         rc_dedup = dedupe_commits(data["commits"]) # Deduplicate commits
+         for commit in rc_dedup: # Iterate over commits
+            sha = commit.get("sha", "")[:7] # Short SHA
+            msg = (commit.get("msg") or "").splitlines()[0] # First line of message
+            date = commit.get("date", "unknown") # Commit date
+            url = commit.get("url", "") # Commit URL
+            md += f"- `{sha}` {msg} ({date}) [{url}]({url})\n" # Commit line
+         md += "\n" # Newline
+
+      reports[author] = md # Store report content
+
+      safe_author = author.replace("/", "_").replace(" ", "_") # Safe filename
+      reports_dir = f"./reports/{start_s}_{end_s}/{safe_author}/" # Reports directory
+      os.makedirs(reports_dir, exist_ok=True) # Ensure directory exists
+      filename = f"{safe_author}_{start_s}_{end_s}.qmd".replace(":", "-") # Filename
+      save_quarto_markdown_content(md, os.path.join(reports_dir, filename)) # Save markdown
+
+      render_quarto_report(os.path.join(reports_dir, filename), output_formats) if output_formats else None # Render report if formats specified
+
+      verbose_output(f"Generated Quarto report for {author} → {os.path.join(reports_dir, filename)}")
+
+   return reports # Return dict of reports
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
