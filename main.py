@@ -317,6 +317,35 @@ def fetch_prs_from_timeline(repo: str, issue_number: int):
    
    return prs # Return PR numbers
 
+def fetch_commits_from_pr(repo: str, pr_number: int):
+   """
+   Fetch commits associated with a PR and save JSON.
+
+   :param repo: Repository name
+   :param pr_number: PR number
+   :return: List of commit objects with sha, msg, date, author, url
+   """
+
+   url = f"https://api.github.com/repos/{OWNER}/{repo}/pulls/{pr_number}/commits" # PR commits URL
+
+   response = requests.get(url, headers=HEADERS) # Make request
+   response.raise_for_status() # Raise error if bad response
+   data = response.json() # Parse JSON
+   save_json(data, f"./responses/pr_{pr_number}_commits.json") # Save commits data
+   commits = [] # Collected commits
+
+   for commit in data: # Iterate over commits
+      commit_obj = { # Extract relevant fields
+         "sha": commit.get("sha"),
+         "msg": commit.get("commit", {}).get("message", "")[:200],
+         "date": commit.get("commit", {}).get("author", {}).get("date"),
+         "author": commit.get("commit", {}).get("author", {}).get("name"),
+         "url": commit.get("html_url")
+      }
+      commits.append(commit_obj) # Add to list
+   
+   return commits # Return commits
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
