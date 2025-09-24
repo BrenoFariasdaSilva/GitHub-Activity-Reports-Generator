@@ -58,7 +58,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
 
 ## Introduction
 
-Detailed project description.
+The **GitHub Activity Reports Generator** is a Python-based tool designed to streamline the process of collecting and analyzing contributions across multiple GitHub repositories. It connects to the GitHub API, retrieves issues, sub-issues, pull requests, and commits within a specified date range, and organizes the data per author. The tool saves raw JSON responses for traceability and produces structured, per-author reports in Quarto Markdown (`.qmd`) format, which can be rendered into PDF, DOCX, or other formats. This enables teams, project managers, and educators to gain clear insights into individual and team contributions, track progress over time, and maintain accurate records of repository activity.
 
 ## Features
 
