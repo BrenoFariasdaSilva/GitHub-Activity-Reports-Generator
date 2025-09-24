@@ -45,6 +45,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
     - [Install dependencies](#install-dependencies)
     - [Environment Variables configuration](#environment-variables-configuration)
+    - [Repository configuration](#repository-configuration)
   - [Usage](#usage)
   - [Results - Optional](#results---optional)
   - [Contributing](#contributing)
@@ -166,6 +167,27 @@ GITHUB_CLASSIC_TOKEN=your_personal_access_token
 
 Only **classic tokens** are supported (with `repo` and `read:org` scopes). You can generate a new classic token in your GitHub account settings under Developer Settings > Personal Access Tokens > Tokens (classic), or by the following link: [Generate new token (classic)](https://github.com/settings/tokens)
 
+### Repository configuration
+
+Edit the script to configure the repositories:
+
+```python
+OWNER = "ORG_NAME_HERE" # Replace with the GitHub organization or username
+REPOS = {
+   "PROJECT_NAME_HERE": [ # Replace with your project/group name. Each project can have one or more repositories, like backend/frontend/etc.
+      "FIRST_REPO_HERE", # Replace with the backend repo name, for example
+      "SECOND_REPO_HERE" # Replace with the frontend repo name, for example
+   ]
+} # List of repositories to process
+```
+
+Repositories are automatically sorted alphabetically.
+
+Also, you can set the `VERBOSE` variable to `True` or `False` to enable/disable detailed logging. By default it is set to `False`, cause it`s mainly used for debugging purposes and generates a lot of output in the terminal/consol.
+
+```python
+VERBOSE = False # Set to True to print detailed messages
+```
 
 ## Usage
 
