@@ -156,6 +156,46 @@ def save_json(obj, path: str):
 
    verbose_output(f"Saved JSON → {path}")
 
+def search_issues_by_field(repo: str, field: str, since_str: str, until_str: str):
+   """
+   Helper to search issues by a field (created or updated) in a date range.
+   Returns list of issue items (search result objects).
+
+   :param repo: Repository name
+   :param field: Field to filter by ("created" or "updated")
+   :param since_str: Start date string (GitHub format)
+   :param until_str: End date string (GitHub format)
+   :return: List of issue items (dicts)
+   """
+
+   items = [] # Collected items
+   per_page = 100 # Max items per page
+   page = 1 # Start at page 1
+
+   while True: # Loop through pages
+      query = f"repo:{OWNER}/{repo}+type:issue+{field}:{since_str}..{until_str}" # Search query
+      url = f"https://api.github.com/search/issues?q={query}&per_page={per_page}&page={page}" # Search URL
+
+      response = requests.get(url, headers=HEADERS) # Make request
+      response.raise_for_status() # Raise error if bad response
+
+      data = response.json() # Parse JSON
+      save_json(data, f"./responses/search_issues_{field}_{page}.json") # Save search page
+
+      page_items = data.get("items", []) # Get items
+
+      if not page_items: # If no items, we're done
+         break # Exit loop
+
+      items.extend(page_items) # Add to collected items
+
+      if len(page_items) < per_page: # If fewer than per_page, last page
+         break # Exit loop
+
+      page += 1 # Next page
+   
+   return items # Return collected items
+
 def main():
    """"
    Main function to parse arguments, fetch data, and generate reports.
