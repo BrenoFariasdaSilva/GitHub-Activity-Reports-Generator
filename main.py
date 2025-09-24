@@ -497,6 +497,19 @@ def gather_activity_for_issue(repo: str, issue_json, start: dt.datetime, end: dt
 
    return info # Return collected info
 
+def get_full_name_from_username(username: str) -> str: 
+   """
+   Map a GitHub username to a full name using USER_MAP.
+
+   :param username: GitHub username
+   :return: Full name if found, else original username
+   """
+
+   for full_name, usernames in USER_MAP.items(): # Iterate over USER_MAP
+      if username in usernames: # If username matches
+         return full_name # Return full name
+   return username # Fallback if not found
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
