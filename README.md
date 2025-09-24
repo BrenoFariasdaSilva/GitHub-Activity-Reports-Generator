@@ -43,7 +43,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [Setup](#setup)
     - [Clone the repository](#clone-the-repository)
     - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
-    - [Dependencies](#dependencies)
+    - [Install dependencies](#install-dependencies)
     - [Dataset - Optional](#dataset---optional)
   - [Usage](#usage)
   - [Results - Optional](#results---optional)
@@ -122,12 +122,38 @@ source venv/bin/activate # On Linux/macOS
 venv\Scripts\activate # On Windows
 ```
 
-### Dependencies
+### Install dependencies
 
-1. Install the project dependencies with the following command:
+To generate reports, you’ll need to install **Quarto CLI** and **TinyTeX** (required for PDF output).
+
+1. Install Quarto by following the official instructions: [Quarto Installation Guide](https://quarto.org/docs/get-started/).
+
+Verify that is was installed correctly:
+
+```bash
+quarto --version
+```
+
+2. Install TinyTeX (a lightweight LaTeX distribution) with Quarto:
+
+```bash
+quarto install tinytex
+```
+
+Now you need to install the required Python packages.
+
+With `make`:
 
 ```bash
 make dependencies
+```
+
+Or manually:
+
+```bash
+source venv/bin/activate # On Linux/macOS
+venv\Scripts\activate # On Windows
+pip install -r requirements.txt
 ```
 
 ### Dataset - Optional
