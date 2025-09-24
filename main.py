@@ -288,6 +288,35 @@ def fetch_sub_issues(repo: str, issue_number: int):
    
    return detailed # Return detailed sub-issues
 
+def fetch_prs_from_timeline(repo: str, issue_number: int):
+   """
+   Fetch timeline events for the issue and collect PRs that cross-reference it.
+   Saves timeline JSON as well.
+
+   :param repo: Repository name
+   :param issue_number: Issue number
+   :return: List of PR numbers that reference the issue
+   """
+
+   url = f"https://api.github.com/repos/{OWNER}/{repo}/issues/{issue_number}/timeline" # Timeline URL
+   headers = {**HEADERS, "Accept": "application/vnd.github.mockingbird-preview"} # Add preview Accept header
+
+   response = requests.get(url, headers=headers) # Make request
+   response.raise_for_status() # Raise error if bad response
+   data = response.json() # Parse JSON
+   save_json(data, f"./responses/issue_{issue_number}_timeline.json") # Save timeline data
+
+   prs = [] # Collected PR numbers
+   for e in data: # Iterate over timeline events
+      if e.get("event") == "cross-referenced" and "source" in e: # If cross-referenced event
+         src = e["source"] # Get source
+         if src.get("type") == "pull_request": # If source is a PR
+            pr_num = src.get("issue", {}).get("number") # Get PR number
+            if pr_num: # If valid number
+               prs.append(pr_num) # Add to list
+   
+   return prs # Return PR numbers
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
