@@ -57,6 +57,48 @@ RUN_FUNCTIONS = {"Play Sound": True} # Toggle functions on/off
 
 # Function definitions
 
+def parse_date_input(s: str, default_time_start: bool = True) -> dt.datetime:
+   """
+   Parse a date string in various common forms and return a datetime
+   localized to the São Paulo timezone (America/Sao_Paulo):
+
+   - 'YYYY-MM-DD'
+   - 'YYYY-MM-DDTHH:MM:SS'
+   - full ISO with timezone (Z or hh:mm)
+
+   :param s: Date string to parse
+   :param default_time_start: If True and only date is given, use 00:00:00, else 23:59:59
+   :return: Parsed datetime object in São Paulo timezone
+   """
+
+   if s is None: # If the string is empty or None
+      raise ValueError("Date string is required")
+
+   s = s.strip() # Trim whitespace
+   tz_sp = ZoneInfo("America/Sao_Paulo") # São Paulo timezone
+
+   try: # Try parsing the string
+      if len(s) == 10 and s.count("-") == 2: # If only date part is given
+         d = dt.datetime.strptime(s, "%Y-%m-%d") # Parse date
+         if default_time_start: # If start of day
+            return dt.datetime.combine(d.date(), dt.time.min, tzinfo=tz_sp) # 00:00:00
+         else: # If end of day
+            return dt.datetime.combine(d.date(), dt.time.max, tzinfo=tz_sp) # 23:59:59
+
+      if s.endswith("Z"): # If ends with Z (UTC)
+         s2 = s[:-1] + "+00:00" # Replace Z with +00:00
+         d = dt.datetime.fromisoformat(s2) # Parse ISO
+         return d.astimezone(tz_sp) # Convert UTC to São Paulo
+
+      d = dt.datetime.fromisoformat(s) # Try parsing full ISO
+      if d.tzinfo is None: # If no timezone info
+         return d.replace(tzinfo=tz_sp) # Assume São Paulo
+      else: # If has timezone info
+         return d.astimezone(tz_sp) # Convert to São Paulo
+
+   except Exception as e: # On error
+      raise ValueError(f"Unable to parse date string '{s}': {e}")
+
 def main():
    """"
    Main function to parse arguments, fetch data, and generate reports.
