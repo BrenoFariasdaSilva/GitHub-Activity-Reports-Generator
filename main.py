@@ -510,6 +510,23 @@ def get_full_name_from_username(username: str) -> str:
          return full_name # Return full name
    return username # Fallback if not found
 
+def get_author_name(obj):
+   """
+   Extract author name from issue or commit object.
+
+   :param obj: Issue or commit JSON object
+   :return: Author full name or "unknown"
+   """
+
+   if not obj: # If object is None or empty
+      return "unknown"
+   if "user" in obj: # If issue object
+      return get_full_name_from_username(obj["user"].get("login") or "unknown") # Get username
+   if "author" in obj: # If commit object
+      return get_full_name_from_username(obj.get("author") or "unknown") # Get author name
+   
+   return "unknown" # Fallback
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
