@@ -346,6 +346,38 @@ def fetch_commits_from_pr(repo: str, pr_number: int):
    
    return commits # Return commits
 
+def fetch_prs_from_search(repo: str, issue_number: int):
+   """
+   Search PRs that mention the issue (in title/body). Saves search JSON pages.
+
+   :param repo: Repository name
+   :param issue_number: Issue number
+   :return: List of PR numbers that mention the issue
+   """
+
+   prs = [] # Collected PR numbers
+   per_page = 100 # Max items per page
+   page = 1 # Start at page 1
+
+   while True: # Loop through pages
+      query = f"repo:{OWNER}/{repo}+type:pr+%23{issue_number}" # Search query (issue number with #)
+      url = f"https://api.github.com/search/issues?q={query}&per_page={per_page}&page={page}" # Search URL
+
+      response = requests.get(url, headers=HEADERS) # Make request
+      response.raise_for_status() # Raise error if bad response
+      data = response.json() # Parse JSON
+      save_json(data, f"./responses/issue_{issue_number}_prs_search_page_{page}.json") # Save search page
+
+      items = data.get("items", []) # Get items
+      for item in items: # Iterate over items
+         prs.append(item["number"]) # Add PR number to list
+
+      if len(items) < per_page: # If fewer than per_page, last page
+         break # Exit loop
+      page += 1 # Next page
+
+   return prs # Return PR numbers
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
