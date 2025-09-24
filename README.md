@@ -1,6 +1,6 @@
 <div align="center">
   
-# [GitHub-Activity-Reports-Generator.](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator) <img src="Icon-Image-URL"  width="3%" height="3%">
+# [GitHub-Activity-Reports-Generator.](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator) <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg"  width="3%" height="3%">
 
 </div>
 
