@@ -46,6 +46,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Install dependencies](#install-dependencies)
     - [Environment Variables configuration](#environment-variables-configuration)
     - [Repository configuration](#repository-configuration)
+    - [Username Matching configuration](#username-matching-configuration)
   - [Usage](#usage)
   - [Results - Optional](#results---optional)
   - [Contributing](#contributing)
@@ -188,6 +189,18 @@ Also, you can set the `VERBOSE` variable to `True` or `False` to enable/disable 
 ```python
 VERBOSE = False # Set to True to print detailed messages
 ```
+
+### Username Matching configuration
+
+Edit the `USER_MAP` dictionary inside `main.py` script to configure username mappings, in order to have one single author name per user and not multiple variations, like:
+```
+reports/YYYY-MM-DD_YYYY-MM-DD/John_Doe/
+├── John_Doe_YYYY-MM-DD_YYYY-MM-DD.qmd // Real Name
+├── J_Doe_YYYY-MM-DD_YYYY-MM-DD.qmd // Variation 1, cause its the GitHub username
+└── johnd_YYYY-MM-DD_YYYY-MM-DD.qmd // Variation 2, cause its the GitHub email prefix
+```
+
+By keeping this updated, you ensure that all contributions are correctly attributed to the right person and avoid fragmentation of reports.
 
 ## Usage
 
