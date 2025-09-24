@@ -39,6 +39,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Features](#features)
+  - [Todo / Roadmap](#todo--roadmap)
   - [Requirements](#requirements)
   - [Setup](#setup)
     - [Clone the repository](#clone-the-repository)
@@ -73,7 +74,14 @@ The **GitHub Activity Reports Generator** is a Python-based tool designed to str
 - Deduplicates commits by SHA.  
 - Includes sound notification when finished.  
 
----
+## Todo / Roadmap
+
+The following improvements and enhancements are planned for this project. These items are also documented in the `main.py` header description:
+
+- **Organize responses directory** → Create subdirectories per repository and separate folders for each issue, storing all related content inside.  
+- **Incremental data fetching** → Avoid re-fetching all data every time; only retrieve new or updated items.  
+- **GraphQL support** → Implement GraphQL queries for `/Projects` content to improve efficiency and flexibility.  
+- **Automate USER_MAP updates** → Automatically detect and update GitHub username to real name mappings to prevent manual maintenance.  
 
 ## Requirements
 
