@@ -99,6 +99,24 @@ def parse_date_input(s: str, default_time_start: bool = True) -> dt.datetime:
    except Exception as e: # On error
       raise ValueError(f"Unable to parse date string '{s}': {e}")
 
+def to_github_time_string(d: dt.datetime) -> str:
+   """
+   Convert datetime to GitHub/RFC3339 style string in São Paulo timezone:
+   YYYY-MM-DDTHH:MM:SS-03:00
+
+   :param d: datetime object (naive or with tzinfo)
+   :return: Formatted string
+   """
+
+   tz_sp = ZoneInfo("America/Sao_Paulo") # São Paulo timezone
+
+   if d.tzinfo is None: # If naive datetime
+      d = d.replace(tzinfo=tz_sp) # Assume naive datetime -> localize to São Paulo
+   else: # If has timezone info
+      d = d.astimezone(tz_sp) # Convert to São Paulo
+
+   return d.isoformat(timespec="seconds") # Return ISO string without microseconds
+
 def main():
    """"
    Main function to parse arguments, fetch data, and generate reports.
