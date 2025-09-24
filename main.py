@@ -214,6 +214,31 @@ def fetch_issue(repo: str, issue_number: int):
 
    return data # Return issue data
 
+def fetch_issues_in_date_range(repo: str, start: dt.datetime, end: dt.datetime):
+   """
+   Fetch all issues created OR updated in the date range.
+   Saves search pages and returns unique issue numbers found.
+
+   :param repo: Repository name
+   :param start: Start datetime
+   :param end: End datetime
+   :return: List of detailed issue JSON objects
+   """
+
+   since_str = to_github_time_string(start) # Convert start to GitHub string
+   until_str = to_github_time_string(end) # Convert end to GitHub string
+
+   created_items = search_issues_by_field(repo, "created", since_str, until_str) # Search created issues
+   updated_items = search_issues_by_field(repo, "updated", since_str, until_str) # Search updated issues
+
+   numbers = {item["number"] for item in created_items + updated_items} # Unique issue numbers
+   issues = [] # Detailed issues
+
+   for num in sorted(numbers): # Fetch each issue
+      issues.append(fetch_issue(repo, num)) # Fetch and add to list
+
+   return issues # Return detailed issues
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
