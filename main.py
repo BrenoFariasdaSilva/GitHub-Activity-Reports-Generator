@@ -239,6 +239,55 @@ def fetch_issues_in_date_range(repo: str, start: dt.datetime, end: dt.datetime):
 
    return issues # Return detailed issues
 
+def fetch_sub_issues(repo: str, issue_number: int):
+   """
+   Fetch sub-issues tracked by an epic (trackedIssues via GraphQL), save responses,
+   and fetch each sub-issue details as well.
+
+   :param repo: Repository name
+   :param issue_number: Epic issue number
+   :return: List of detailed sub-issue JSON objects
+   """
+
+   url = "https://api.github.com/graphql" # GraphQL endpoint
+
+   query = """
+   query($owner:String!, $repo:String!, $num:Int!) {
+      repository(owner:$owner, name:$repo) {
+         issue(number:$num) {
+            id
+            title
+            number
+            trackedIssues(first:100) {
+               nodes {
+                  number
+                  title
+                  state
+                  url
+               }
+            }
+         }
+      }
+   }
+   """
+
+   variables = {"owner": OWNER, "repo": repo, "num": issue_number} # GraphQL variables
+   response = requests.post(url, headers=HEADERS, json={"query": query, "variables": variables}) # Make request
+   response.raise_for_status() # Raise error if bad response
+   data = response.json() # Parse JSON
+   save_json(data, f"./responses/sub_issues_{issue_number}.json") # Save response
+
+   nodes = data.get("data", {}).get("repository", {}).get("issue", {}).get("trackedIssues", {}).get("nodes", []) or [] # Get sub-issue nodes
+   detailed = [] # Detailed sub-issues
+
+   for n in nodes: # Iterate over sub-issue nodes
+      si_num = n.get("number") # Get sub-issue number
+      if si_num: # If valid number
+         si_data = fetch_issue(repo, si_num) # Fetch detailed sub-issue
+         detailed.append(si_data) # Add to list
+   
+   return detailed # Return detailed sub-issues
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
