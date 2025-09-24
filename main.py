@@ -527,6 +527,34 @@ def get_author_name(obj):
    
    return "unknown" # Fallback
 
+def dedupe_commits(commits_list):
+   """
+   Deduplicate commits by SHA (preserve first occurrence).
+
+   :param commits_list: List of commit objects
+   :return: Deduplicated list of commit objects
+   """
+
+   seen = set() # Seen SHAs
+   deduped = [] # Deduplicated commits
+
+   for commit in commits_list: # Iterate over commits
+      sha = commit.get("sha") # Get SHA
+      
+      if not sha: # If no SHA (rare), stringify entire commit
+         text = json.dumps(commit, sort_keys=True) # Stringify commit
+         if text in seen: # If already seen, skip
+            continue # Skip duplicate
+         seen.add(text) # Add to seen
+         deduped.append(commit) # Add to deduped
+         continue # Continue to next commit
+
+      if sha not in seen: # If SHA not seen
+         seen.add(sha) # Add SHA to seen
+         deduped.append(commit) # Add to deduped
+      
+   return deduped # Return deduplicated commits
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
