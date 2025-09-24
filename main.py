@@ -421,6 +421,29 @@ def fetch_repo_commits_in_range(repo: str, start: dt.datetime, end: dt.datetime)
    
    return commits # Return commits
 
+def fetch_commits_search(repo: str, issue_number: int, start: dt.datetime, end: dt.datetime):
+   """
+   Fetch commits in the repo within the date range and filter those that
+   mention the issue number in the commit message. Works with private repos.
+
+   :param repo: Repository name
+   :param issue_number: Issue number to filter by
+   :param start: Start datetime
+   :param end: End datetime
+   :return: List of commit objects with sha, msg, date, author, url
+   """
+
+   all_commits = fetch_repo_commits_in_range(repo, start, end) # Get all commits in date range
+
+   commits = [ # Filter commits that mention the issue number
+      commit for commit in all_commits # Iterate over all commits
+      if f"#{issue_number}" in (commit.get("msg") or "") # Verify if issue number is in message
+   ]
+
+   save_json(commits, f"./responses/issue_{issue_number}_commits_filtered.json") # Save filtered commits
+
+   return commits # Return filtered commits
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
