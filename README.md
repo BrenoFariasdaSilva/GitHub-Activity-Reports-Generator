@@ -42,8 +42,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [Requirements](#requirements)
   - [Setup](#setup)
     - [Clone the repository](#clone-the-repository)
-  - [Installation:](#installation)
-  - [Run Programing Language Code:](#run-programing-language-code)
+    - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
     - [Dependencies](#dependencies)
     - [Dataset - Optional](#dataset---optional)
   - [Usage](#usage)
@@ -105,29 +104,22 @@ git clone https://github.com/BrenoFariasDaSilva/GitHub-Activity-Reports-Generato
 cd GitHub-Activity-Reports-Generator
 ```
 
-## Installation:
-* Programing Language:
+### Virtual environment (strongly recommended)
 
-	* Manually:
-		```bash
-		# Programing Language:
-		sudo apt install program-language -y
-		```
+With `make`:
 
-  * Using Makefile:
-    ```bash
-    make install
-    ```
-
-  * Using ShellScript:
-    ```bash
-    chmod +x install.sh
-    sudo ./install.sh
-    ```  
-
-## Run Programing Language Code:
 ```bash
-# Command here 
+make venv
+source venv/bin/activate # On Linux/macOS
+venv\Scripts\activate # On Windows
+```
+
+Or manually:
+
+```bash
+python -m venv venv
+source venv/bin/activate # On Linux/macOS
+venv\Scripts\activate # On Windows
 ```
 
 ### Dependencies
