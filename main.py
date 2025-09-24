@@ -196,8 +196,26 @@ def search_issues_by_field(repo: str, field: str, since_str: str, until_str: str
    
    return items # Return collected items
 
+def fetch_issue(repo: str, issue_number: int):
+   """
+   Fetch details for a specific GitHub issue and save JSON.
+
+   :param repo: Repository name
+   :param issue_number: Issue number
+   :return: JSON data of the issue
+   """
+
+   url = f"https://api.github.com/repos/{OWNER}/{repo}/issues/{issue_number}" # Issue URL
+   response = requests.get(url, headers=HEADERS) # Make request
+   response.raise_for_status() # Raise error if bad response
+
+   data = response.json() # Parse JSON
+   save_json(data, f"./responses/issue_{issue_number}.json") # Save issue data
+
+   return data # Return issue data
+
 def main():
-   """"
+   """
    Main function to parse arguments, fetch data, and generate reports.
    Arguments:
    --since: Start date (YYYY-MM-DD or ISO)
