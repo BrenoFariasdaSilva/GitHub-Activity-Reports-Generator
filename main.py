@@ -703,6 +703,17 @@ def generate_quarto_report_per_author(start, end, issues_info, repo_commits, out
 
    return reports # Return dict of reports
 
+def verify_filepath_exists(filepath):
+   """
+   Verify if a file or folder exists at the specified path.
+
+   :param filepath: Path to the file or folder
+   :return: True if the file or folder exists, False otherwise
+   """
+
+   verbose_output(f"{BackgroundColors.GREEN}Verifying path: {BackgroundColors.CYAN}{filepath}{Style.RESET_ALL}")
+   return os.path.exists(filepath) # Return if path exists
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
