@@ -38,6 +38,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
 - [GitHub-Activity-Reports-Generator. ](#github-activity-reports-generator-)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
+  - [Features](#features)
   - [Requirements](#requirements)
   - [Setup](#setup)
     - [Clone the repository](#clone-the-repository)
@@ -52,10 +53,24 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [License](#license)
     - [Apache License 2.0](#apache-license-20)
 
-
 ## Introduction
 
 Detailed project description.
+
+## Features
+
+- Collects **issues** (created and updated) within a given date range.  
+- Fetches **sub-issues** (via GitHub API).  
+- Extracts **PRs strictly linked to issues** (via timeline).  
+- Gathers **commits** from PRs and direct commit searches.  
+- Maps GitHub usernames to **real author names**.  
+- Saves **raw JSON responses**.  
+- Generates **Quarto Markdown reports per author** (qmd, that can be converted to PDF, DOCX, etc.).  
+- Supports **multiple repositories**, automatically sorted alphabetically.  
+- Deduplicates commits by SHA.  
+- Includes sound notification when finished.  
+
+---
 
 ## Requirements
 
