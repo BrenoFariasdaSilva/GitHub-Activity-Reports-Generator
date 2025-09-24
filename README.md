@@ -1,6 +1,6 @@
 <div align="center">
   
-# [Template-Project.](Repository-URL) <img src="Icon-Image-URL"  width="3%" height="3%">
+# [GitHub-Activity-Reports-Generator.](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator) <img src="Icon-Image-URL"  width="3%" height="3%">
 
 </div>
 
@@ -16,14 +16,14 @@ Project-Description.
 
 <div align="center">
 
-![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/Template-Project)
-![GitHub Commits](https://img.shields.io/github/commit-activity/t/BrenoFariasDaSilva/Template-Project/main)
-![GitHub Last Commit](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/Template-Project)
-![GitHub Forks](https://img.shields.io/github/forks/BrenoFariasDaSilva/Template-Project)
-![GitHub Language Count](https://img.shields.io/github/languages/count/BrenoFariasDaSilva/Template-Project)
-![GitHub License](https://img.shields.io/github/license/BrenoFariasdaSilva/Template-Project)
-![GitHub Stars](https://img.shields.io/github/stars/BrenoFariasdaSilva/Template-Project)
-![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/Template-Project.svg)
+![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Commits](https://img.shields.io/github/commit-activity/t/BrenoFariasDaSilva/GitHub-Activity-Reports-Generator/main)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Forks](https://img.shields.io/github/forks/BrenoFariasDaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Language Count](https://img.shields.io/github/languages/count/BrenoFariasDaSilva/GitHub-Activity-Reports-Generator)
+![GitHub License](https://img.shields.io/github/license/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Stars](https://img.shields.io/github/stars/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator.svg)
 
 </div>
 
@@ -34,7 +34,7 @@ Project-Description.
 </div>
 
 ## Table of Contents
-- [Template-Project. ](#template-project-)
+- [GitHub-Activity-Reports-Generator. ](#github-activity-reports-generator-)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Requirements](#requirements)
@@ -70,8 +70,8 @@ Bullet points of the requirements.
 1. Clone the repository with the following command:
 
 ```bash
-git clone https://github.com/BrenoFariasDaSilva/Template-Project.git
-cd Template-Project
+git clone https://github.com/BrenoFariasDaSilva/GitHub-Activity-Reports-Generator.git
+cd GitHub-Activity-Reports-Generator
 ```
 
 ## Installation:
@@ -109,7 +109,7 @@ make dependencies
 
 ### Dataset - Optional
 
-1. Download the dataset from [WEBSITE-HERE]() and place it in this project directory `(/Template-Project)` and run the following command:
+1. Download the dataset from [WEBSITE-HERE]() and place it in this project directory `(/GitHub-Activity-Reports-Generator)` and run the following command:
 
 ```bash
 make dataset
@@ -182,7 +182,7 @@ We thank the following people who contributed to this project:
   <tr>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="https://github.com/BrenoFariasdaSilva/Template-Project/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
+        <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
         <sub>
           <b>Breno Farias da Silva</b>
         </sub>
@@ -190,7 +190,7 @@ We thank the following people who contributed to this project:
     </td>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="https://github.com/BrenoFariasdaSilva/Template-Project/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
+        <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
         <sub>
           <b>Breno Farias da Silva</b>
         </sub>
@@ -198,7 +198,7 @@ We thank the following people who contributed to this project:
     </td>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="https://github.com/BrenoFariasdaSilva/Template-Project/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
+        <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
         <sub>
           <b>Breno Farias da Silva</b>
         </sub>
