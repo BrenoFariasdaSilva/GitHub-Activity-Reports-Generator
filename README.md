@@ -74,7 +74,25 @@ Detailed project description.
 
 ## Requirements
 
-Bullet points of the requirements.
+- Python **3.9 or higher**  
+- A valid GitHub **Personal Access Token (Classic)** with at least `repo` and `read:org` scopes  
+- `make` utility installed on your system  
+- Internet connection (to fetch data from GitHub API)  
+- [Quarto CLI](https://quarto.org/) installed system-wide (required for report rendering)  
+- [Quarto PDF dependencies](https://quarto.org/docs/output-formats/pdf/) installed (for PDF output)
+
+Dependencies in the `requirements.txt` include:
+- `certifi` → Provides trusted CA certificates for secure HTTPS requests.  
+- `charset-normalizer` → Handles encoding/decoding of response text when fetching from the GitHub API.  
+- `colorama` → Enables colored terminal output for status and progress messages.  
+- `DateTime` → Simplifies working with dates and times (used alongside `pytz`).  
+- `idna` → Ensures proper handling of internationalized domain names in URLs.  
+- `python-dotenv` → Loads environment variables from a `.env` file (e.g., GitHub token).  
+- `pytz` → Provides time zone support for date/time handling and conversions.  
+- `requests` → Core HTTP library used to interact with the GitHub API.  
+- `setuptools` → Build system utility required for packaging and environment setup.  
+- `urllib3` → Low-level HTTP library that powers `requests`, handling connections and retries.  
+- `zope.interface` → Dependency of `DateTime`, provides interface definitions and enforcement.  
 
 ## Setup
 
