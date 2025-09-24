@@ -26,6 +26,9 @@ desktop.ini
 *.txt
 *.pdf
 
+# But keep requirements.txt tracked
+!requirements.txt
+
 # Environments
 .env
 .venv
