@@ -8,7 +8,8 @@
   
 ---
 
-Project-Description.
+This project is a **GitHub Activity Reports Generator** that collects and organizes information about issues, sub-issues, pull requests (PRs), and commits from specified repositories within a defined date range.  
+It saves raw JSON responses to `./responses/` and generates **Quarto Markdown reports** grouped by author, with outputs in PDF, DOCX, and QMD formats stored in `./reports/`.
   
 ---
 
