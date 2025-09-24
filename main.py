@@ -571,6 +571,32 @@ def save_quarto_markdown_content(content: str, path: str):
 
    verbose_output(f"Saved Quarto markdown → {path}")
 
+def render_quarto_report(input_file: str, output_formats=["pdf", "docx"]):
+   """
+   Render a Quarto markdown file to specified output formats using Quarto CLI.
+
+   :param input_file: Path to the input .qmd file
+   :param output_formats: List of output formats (e.g. ["pdf", "docx"])
+   :return: None
+   """
+
+   if not shutil.which("quarto"): # Verify Quarto CLI is available
+      print(f"{BackgroundColors.RED}Error: Quarto CLI not found. Please install Quarto to generate reports.{Style.RESET_ALL}")
+      return
+
+   for file_format in output_formats: # Iterate over formats
+      cmd = ["quarto", "render", input_file, "--to", file_format] # Build command
+      verbose_output(f"Running command: {' '.join(cmd)}") # Verbose output
+
+      try: # Run the command
+         result = subprocess.run(cmd, capture_output=True, text=True) # Run command
+         if result.returncode != 0: # If error occurred
+            print(f"{BackgroundColors.RED}Error: Quarto rendering failed ({file_format})\n{result.stderr}{Style.RESET_ALL}") # Print error
+         else: # If successful
+            verbose_output(f"{BackgroundColors.GREEN}Quarto rendering succeeded ({file_format}){Style.RESET_ALL}") # Success message
+      except Exception as e: # On exception
+         print(f"{BackgroundColors.RED}Error running Quarto ({file_format}): {e}{Style.RESET_ALL}")
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
