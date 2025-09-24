@@ -45,7 +45,6 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
     - [Install dependencies](#install-dependencies)
     - [Environment Variables configuration](#environment-variables-configuration)
-    - [Dataset - Optional](#dataset---optional)
   - [Usage](#usage)
   - [Results - Optional](#results---optional)
   - [Contributing](#contributing)
@@ -167,13 +166,6 @@ GITHUB_CLASSIC_TOKEN=your_personal_access_token
 
 Only **classic tokens** are supported (with `repo` and `read:org` scopes). You can generate a new classic token in your GitHub account settings under Developer Settings > Personal Access Tokens > Tokens (classic), or by the following link: [Generate new token (classic)](https://github.com/settings/tokens)
 
-### Dataset - Optional
-
-1. Download the dataset from [WEBSITE-HERE]() and place it in this project directory `(/GitHub-Activity-Reports-Generator)` and run the following command:
-
-```bash
-make dataset
-```
 
 ## Usage
 
