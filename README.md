@@ -48,7 +48,8 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Repository configuration](#repository-configuration)
     - [Username Matching configuration](#username-matching-configuration)
   - [Usage](#usage)
-  - [Results - Optional](#results---optional)
+  - [Results](#results)
+    - [Example structure](#example-structure)
   - [Contributing](#contributing)
   - [Collaborators](#collaborators)
   - [License](#license)
@@ -220,9 +221,28 @@ venv\Scripts\activate # On Windows
 python3 main.py --since 2024-01-01 --until 2024-12-31
 ```
 
-## Results - Optional
+## Results
 
-Discuss the results obtained in the project.
+After running the project, you will obtain:  
+
+- **Raw data** → JSON files with issues, PRs, and commits from the configured repositories, stored in the `responses/` folder.  
+- **Per-author reports** → Contributions grouped by author (based on `USER_MAP`) within the selected date range. Reports are generated as Quarto `.qmd` files and automatically rendered into **PDF** and **DOCX** formats inside the `reports/` directory.  
+- **Traceability** → Clear tracking of how many issues, PRs, and commits were authored by each contributor.  
+- **Navigation** → Hyperlinked references to GitHub issues, PRs, and commits for quick access back to the platform.  
+
+### Example structure
+
+```
+responses/
+├── issue_123.json
+├── pr_456_commits.json
+└── repo_commits_page_1.json
+
+reports/YYYY-MM-DD_YYYY-MM-DD/Author_Name/
+├── Author_Name_YYYY-MM-DD_YYYY-MM-DD.qmd
+├── Author_Name_YYYY-MM-DD_YYYY-MM-DD.pdf
+└── Author_Name_YYYY-MM-DD_YYYY-MM-DD.docx
+```
 
 ## Contributing
 
