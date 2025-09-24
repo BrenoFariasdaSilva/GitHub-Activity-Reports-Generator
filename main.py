@@ -4,6 +4,7 @@ Collects issues, sub-issues, PRs and commits for a repository within a date rang
 saves raw JSON responses to ./responses/, and generates a markdown report.
 Follows the style and structure of the provided template.
 
+@TODO: Make the responses directory have subdirectories per repo, as well as each issue have a dir to it with the content related to it.
 @TODO: Not re-do requests every time, but incremental ones.
 @TODO: GraphQL for /Projects content
 @TODO: Automate USER_MAP dictionary update
