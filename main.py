@@ -477,7 +477,7 @@ def gather_activity_for_issue(repo: str, issue_json, start: dt.datetime, end: dt
 
    timeline_prs = fetch_prs_from_timeline(repo, num) # Timeline PRs for main issue
    for prn in timeline_prs: # Iterate over PR numbers
-      if prn not in info["pr_numbers"]:
+      if prn not in info["pr_numbers"]: # If not already added
          info["pr_numbers"].add(prn) # Only add unique PR
          pr_commits = fetch_commits_from_pr(repo, prn) # Fetch commits from PR
          info["commits"].extend(pr_commits) # Add commits
@@ -496,8 +496,7 @@ def gather_activity_for_issue(repo: str, issue_json, start: dt.datetime, end: dt
             info["pr_numbers"].add(prn)
             info["commits"].extend(fetch_commits_from_pr(repo, prn))
 
-      # Commits mentioning sub-issue number
-      info["commits"].extend(fetch_commits_search(repo, si_num, start, end))
+      info["commits"].extend(fetch_commits_search(repo, si_num, start, end)) # Commits mentioning sub-issue number
 
    return info # Return collected info
 
@@ -716,6 +715,7 @@ def verify_filepath_exists(filepath):
    """
 
    verbose_output(f"{BackgroundColors.GREEN}Verifying path: {BackgroundColors.CYAN}{filepath}{Style.RESET_ALL}")
+   
    return os.path.exists(filepath) # Return if path exists
 
 def play_sound():
