@@ -378,6 +378,49 @@ def fetch_prs_from_search(repo: str, issue_number: int):
 
    return prs # Return PR numbers
 
+def fetch_repo_commits_in_range(repo: str, start: dt.datetime, end: dt.datetime):
+   """
+   Fetch repository commits in a date range using the commits endpoint with since/until.
+   Saves pages as separate files.
+
+   :param repo: Repository name
+   :param start: Start datetime
+   :param end: End datetime
+   :return: List of commit objects with sha, msg, date, author, url
+   """
+
+   since = to_github_time_string(start) # Convert start to GitHub string
+   until = to_github_time_string(end) # Convert end to GitHub string
+   per_page = 100 # Max items per page
+   page = 1 # Start at page 1
+   commits = [] # Collected commits
+
+   while True: # Loop through pages
+      url = f"https://api.github.com/repos/{OWNER}/{repo}/commits?since={since}&until={until}&per_page={per_page}&page={page}" # Commits URL
+      response = requests.get(url, headers=HEADERS) # Make request
+      response.raise_for_status() # Raise error if bad response
+      data = response.json() # Parse JSON
+      save_json(data, f"./responses/repo_commits_page_{page}.json") # Save commits page
+
+      if not data: # If no data, we're done
+         break # Exit loop
+
+      for commit in data: # Iterate over commits
+         commits.append({ # Extract relevant fields
+            "sha": commit.get("sha"),
+            "msg": commit.get("commit", {}).get("message", "")[:200],
+            "date": commit.get("commit", {}).get("author", {}).get("date"),
+            "author": commit.get("commit", {}).get("author", {}).get("name"),
+            "url": commit.get("html_url")
+         })
+
+      if len(data) < per_page: # If fewer than per_page, last page
+         break # Exit loop
+
+      page += 1 # Next page
+   
+   return commits # Return commits
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
