@@ -1,6 +1,10 @@
-# System Files
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore the MacOS DS_Store Files
 .DS_Store
-Thumbs.db
 
 # Ignore the Windows .Desktop Files
 desktop.ini
@@ -13,16 +17,20 @@ desktop.ini
 .tar.gz
 
 # Ignore the Data Directories
-*/Dados/
-*/Data/
-*/Dataset/
-*/Results/
-*/dados/
-*/data/
-*/dataset/
-*/results/
+**/reports/**
+**/responses/**
 
 # Ignore the Data Files
 *.csv
 *.xlsx
-.txt
+*.txt
+*.pdf
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
