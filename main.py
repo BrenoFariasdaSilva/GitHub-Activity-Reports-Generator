@@ -714,6 +714,26 @@ def verify_filepath_exists(filepath):
    verbose_output(f"{BackgroundColors.GREEN}Verifying path: {BackgroundColors.CYAN}{filepath}{Style.RESET_ALL}")
    return os.path.exists(filepath) # Return if path exists
 
+def play_sound():
+   """
+   Plays a sound when the program finishes (skips if Windows).
+
+   :return: None
+   """
+
+   current_os = platform.system() # Get current OS
+
+   if current_os == "Windows": # Skip sound on Windows
+      return # Skip sound on Windows
+   
+   if verify_filepath_exists(SOUND_FILE): # Verify if sound file exists
+      if current_os in SOUND_COMMANDS: # If OS is supported
+         os.system(f"{SOUND_COMMANDS[current_os]} {SOUND_FILE}") # Play sound
+      else: # If OS not supported
+         print(f"{BackgroundColors.RED}OS {BackgroundColors.CYAN}{current_os}{BackgroundColors.RED} not in SOUND_COMMANDS.{Style.RESET_ALL}")
+   else: # If sound file not found
+      print(f"{BackgroundColors.RED}Sound file {BackgroundColors.CYAN}{SOUND_FILE}{BackgroundColors.RED} not found.{Style.RESET_ALL}")
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
