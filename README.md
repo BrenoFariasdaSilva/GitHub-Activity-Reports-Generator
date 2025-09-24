@@ -50,6 +50,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [Usage](#usage)
   - [Results](#results)
     - [Example structure](#example-structure)
+  - [Convert QMD to other formats](#convert-qmd-to-other-formats)
   - [Contributing](#contributing)
   - [Collaborators](#collaborators)
   - [License](#license)
@@ -243,6 +244,26 @@ reports/YYYY-MM-DD_YYYY-MM-DD/Author_Name/
 ├── Author_Name_YYYY-MM-DD_YYYY-MM-DD.pdf
 └── Author_Name_YYYY-MM-DD_YYYY-MM-DD.docx
 ```
+
+## Convert QMD to other formats
+
+If you need to modify the `.qmd` report file, then you need to manually convert it to other formats, so the changes are reflected.
+
+To convert to PDF:
+
+```bash
+quarto render reports/YYYY-MM-DD_YYYY-MM-DD/Author_Name/activity_Author_Name.qmd --to pdf
+```
+
+To convert to DOCX:
+
+```bash
+quarto render reports/YYYY-MM-DD_YYYY-MM-DD/Author_Name/activity_Author_Name.qmd --to docx
+```
+
+This will create `reports/YYYY-MM-DD_YYYY-MM-DD/activity_Author_Name.pdf` and `reports/YYYY-MM-DD_YYYY-MM-DD/activity_Author_Name.docx` in the same directory. The other available formats include `html` and `latex`.
+
+Read the guide on the official Quarto website for more details: [Quarto Output Formats](https://quarto.org/docs/output-formats/all-formats.html).
 
 ## Contributing
 
