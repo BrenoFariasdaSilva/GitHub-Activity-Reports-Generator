@@ -444,6 +444,59 @@ def fetch_commits_search(repo: str, issue_number: int, start: dt.datetime, end: 
 
    return commits # Return filtered commits
 
+def gather_activity_for_issue(repo: str, issue_json, start: dt.datetime, end: dt.datetime):
+   """
+   For a single issue JSON, gather:
+   - sub-issues (trackedIssues)
+   - PRs strictly linked via timeline
+   - commits from PRs
+   - commits via commit search
+   Saves all JSON responses along the way.
+   
+   :param repo: Repository name
+   :param issue_json: Issue JSON object
+   :param start: Start datetime
+   :param end: End datetime
+   :return: Dict with issue, sub_issues, pr_numbers, commits
+   """
+
+   num = issue_json.get("number") # Issue number
+   info = { # Collected info
+      "issue": issue_json,
+      "sub_issues": [],
+      "pr_numbers": set(),
+      "commits": []
+   }
+
+   sub_issues = fetch_sub_issues(repo, num) # Fetch sub-issues
+   info["sub_issues"] = sub_issues # Store sub-issues
+
+   timeline_prs = fetch_prs_from_timeline(repo, num) # Timeline PRs for main issue
+   for prn in timeline_prs: # Iterate over PR numbers
+      if prn not in info["pr_numbers"]:
+         info["pr_numbers"].add(prn) # Only add unique PR
+         pr_commits = fetch_commits_from_pr(repo, prn) # Fetch commits from PR
+         info["commits"].extend(pr_commits) # Add commits
+
+   search_commits = fetch_commits_search(repo, num, start, end) # Commits mentioning the issue number
+   info["commits"].extend(search_commits) # Add commits
+
+   for si in sub_issues: # Repeat for each sub-issue
+      si_num = si.get("number") # Sub-issue number
+      if not si_num: continue # Skip invalid
+
+      # PRs strictly linked in timeline for sub-issue
+      timeline_prs = fetch_prs_from_timeline(repo, si_num)
+      for prn in timeline_prs:
+         if prn not in info["pr_numbers"]:
+            info["pr_numbers"].add(prn)
+            info["commits"].extend(fetch_commits_from_pr(repo, prn))
+
+      # Commits mentioning sub-issue number
+      info["commits"].extend(fetch_commits_search(repo, si_num, start, end))
+
+   return info # Return collected info
+
 def main():
    """
    Main function to parse arguments, fetch data, and generate reports.
