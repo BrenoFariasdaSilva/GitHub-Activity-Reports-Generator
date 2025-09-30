@@ -47,6 +47,7 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Install dependencies](#install-dependencies)
     - [Environment Variables Configuration](#environment-variables-configuration)
       - [Full list of environment variables](#full-list-of-environment-variables)
+      - [main.py configuration](#mainpy-configuration)
   - [Usage](#usage)
   - [Results](#results)
     - [Example structure](#example-structure)
@@ -208,6 +209,15 @@ USER_MAP='{
 ```
 
 ---
+
+#### main.py configuration
+
+Inside the `main.py` file, you can adjust the following constants if needed:
+
+```python
+SAVE_JSONS = False # Set to True to save raw JSON responses in ./responses/
+VERBOSE = False # Set to True to print detailed messages during execution
+```
 
 ## Usage
 
