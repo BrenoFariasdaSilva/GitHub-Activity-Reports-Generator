@@ -27,23 +27,12 @@ from zoneinfo import ZoneInfo # For timezone handling
 DEFAULT_START = "2020-01-01T00:00:00Z" # Start date (ISO format)
 DEFAULT_END = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") # End date (now in UTC)
 
-USER_MAP = { # Dictionary mapping full names to all possible usernames
-   "John Doe": [
-      "John_Doe", # John Doe name but with underscore instead of space
-      "j_doe" # John Doe github username
-   ],
-}
-
 load_dotenv() # Load .env variables
+OWNER = os.getenv("OWNER", "") # GitHub organization or user
+REPOS = json.loads(os.getenv("REPOS", "{}")) # Example: {"org1": ["repo1", "repo2"], "org2": ["repo3"]}
 TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub API with repo scope (https://github.com/settings/tokens)
-OWNER = "ORG_NAME_HERE" # Replace with the GitHub organization or username
-REPOS = {
-   "PROJECT_NAME_HERE": [ # Replace with your project/group name. Each project can have one or more repositories, like backend/frontend/etc.
-      "FIRST_REPO_HERE", # Replace with the backend repo name, for example
-      "SECOND_REPO_HERE" # Replace with the frontend repo name, for example
-   ]
-} # List of repositories to process
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
+USER_MAP = json.loads(os.getenv("USER_MAP", "{}")) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
 HEADERS = {"Authorization": f"token {TOKEN}"} # GitHub API headers (add preview Accept headers when needed)
 VERBOSE = False # Set to True to print detailed messages
 
