@@ -32,6 +32,7 @@ OWNER = os.getenv("OWNER", "") # GitHub organization or user
 REPOS = json.loads(os.getenv("REPOS", "{}")) # Example: {"org1": ["repo1", "repo2"], "org2": ["repo3"]}
 TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub API with repo scope (https://github.com/settings/tokens)
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
+USER_MAP_ONLY = os.getenv("USER_MAP_ONLY", "false").lower() == "true"
 USER_MAP = json.loads(os.getenv("USER_MAP", "{}")) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
 HEADERS = {"Authorization": f"token {TOKEN}"} # GitHub API headers (add preview Accept headers when needed)
 VERBOSE = False # Set to True to print detailed messages
@@ -625,6 +626,9 @@ def generate_quarto_report_per_author(start, end, issues_info, repo_commits, out
    reports = {} # Collected reports
 
    for author, data in author_data.items(): # Iterate over authors
+      if USER_MAP_ONLY and author not in USER_MAP: # If filtering by USER_MAP_ONLY
+         continue # Skip this author
+      
       md = "" # Start of markdown content
 
       md += "---\n" # YAML front matter start
