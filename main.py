@@ -628,7 +628,7 @@ def generate_quarto_report_per_author(start, end, issues_info, repo_commits, out
    for author, data in author_data.items(): # Iterate over authors
       if USER_MAP_ONLY and author not in USER_MAP: # If filtering by USER_MAP_ONLY
          continue # Skip this author
-      
+
       md = "" # Start of markdown content
 
       md += "---\n" # YAML front matter start
