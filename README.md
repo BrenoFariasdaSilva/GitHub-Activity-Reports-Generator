@@ -45,9 +45,8 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
     - [Clone the repository](#clone-the-repository)
     - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
     - [Install dependencies](#install-dependencies)
-    - [Environment Variables configuration](#environment-variables-configuration)
-    - [Repository configuration](#repository-configuration)
-    - [Username Matching configuration](#username-matching-configuration)
+    - [Environment Variables Configuration](#environment-variables-configuration)
+      - [Full list of environment variables](#full-list-of-environment-variables)
   - [Usage](#usage)
   - [Results](#results)
     - [Example structure](#example-structure)
@@ -168,49 +167,48 @@ venv\Scripts\activate # On Windows
 pip install -r requirements.txt
 ```
 
-### Environment Variables configuration
+### Environment Variables Configuration
 
-Copy the `.env-example` file in the project root, naming it `.env`, and add your GitHub Personal Access Token (Classic):
+Copy the `.env-example` file in the project root, naming it `.env`:
+
+#### Full list of environment variables
+
+The `.env` file supports the following variables:
 
 ```env
-GITHUB_CLASSIC_TOKEN=your_personal_access_token
+# GitHub authentication token (classic, required)
+GITHUB_CLASSIC_TOKEN=your_classic_github_token_here
 ```
 
 Only **classic tokens** are supported (with `repo` and `read:org` scopes). You can generate a new classic token in your GitHub account settings under Developer Settings > Personal Access Tokens > Tokens (classic), or by the following link: [Generate new token (classic)](https://github.com/settings/tokens)
 
-### Repository configuration
+Also, you need to configure the owner and repositories to fetch the data from:
 
-Edit the script to configure the repositories:
+```env
+# Owner of the repositories (GitHub organization or username, required)
+GitHub URL Template to fill the variables: https://github.com/{owner}/{repo}
+OWNER=OWNER_NAME_HERE
 
-```python
-OWNER = "ORG_NAME_HERE" # Replace with the GitHub organization or username
-REPOS = {
-   "PROJECT_NAME_HERE": [ # Replace with your project/group name. Each project can have one or more repositories, like backend/frontend/etc.
-      "FIRST_REPO_HERE", # Replace with the backend repo name, for example
-      "SECOND_REPO_HERE" # Replace with the frontend repo name, for example
-   ]
-} # List of repositories to process
+# Dictionary with project names and their repositories (JSON string, required)
+# Example: {"ProjectA": ["repo1", "repo2"], "ProjectB": ["repo3"]}
+REPOS='{"ANY_NAME_FOR_REPOS_LIST": ["REPO_NAME_1", "REPO_NAME_2"]}'
 ```
 
-Repositories are automatically sorted alphabetically.
+Lastly, there is the user mapping configuration, to map GitHub usernames to real names:
 
-Also, you can set the `VERBOSE` variable to `True` or `False` to enable/disable detailed logging. By default it is set to `False`, cause it`s mainly used for debugging purposes and generates a lot of output in the terminal/consol.
+```env
+# If true, only generate reports for users listed in USER_MAP
+# If false, generate reports for all contributors
+USER_MAP_ONLY=true
 
-```python
-VERBOSE = False # Set to True to print detailed messages
+# Dictionary with canonical names and their possible variations (JSON string, optional but recommended)
+# Example: {"John Doe": ["jdoe", "john_d", "John_Doe"]}
+USER_MAP='{
+  "YOUR NAME": ["Your_GitHub_Username", "Your full name with underscores"]
+}'
 ```
 
-### Username Matching configuration
-
-Edit the `USER_MAP` dictionary inside `main.py` script to configure username mappings, in order to have one single author name per user and not multiple variations, like:
-```
-reports/YYYY-MM-DD_YYYY-MM-DD/John_Doe/
-├── John_Doe_YYYY-MM-DD_YYYY-MM-DD.qmd // Real Name
-├── J_Doe_YYYY-MM-DD_YYYY-MM-DD.qmd // Variation 1, cause its the GitHub username
-└── johnd_YYYY-MM-DD_YYYY-MM-DD.qmd // Variation 2, cause its the GitHub email prefix
-```
-
-By keeping this updated, you ensure that all contributions are correctly attributed to the right person and avoid fragmentation of reports.
+---
 
 ## Usage
 
