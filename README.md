@@ -42,10 +42,18 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
   - [TODO / Roadmap](#todo--roadmap)
   - [Requirements](#requirements)
   - [Setup](#setup)
-    - [Clone the repository](#clone-the-repository)
-    - [Virtual environment (strongly recommended)](#virtual-environment-strongly-recommended)
-    - [Install dependencies](#install-dependencies)
-    - [Environment Variables Configuration](#environment-variables-configuration)
+    - [1. Install Python](#1-install-python)
+      - [Linux](#linux)
+      - [macOS](#macos)
+      - [Windows](#windows)
+    - [2. Install `make` utility](#2-install-make-utility)
+      - [Linux](#linux-1)
+      - [macOS](#macos-1)
+      - [Windows](#windows-1)
+    - [3. Clone the repository](#3-clone-the-repository)
+    - [4. Virtual environment (strongly recommended)](#4-virtual-environment-strongly-recommended)
+    - [5. Install dependencies](#5-install-dependencies)
+    - [6. Environment Variables Configuration](#6-environment-variables-configuration)
       - [Full list of environment variables](#full-list-of-environment-variables)
     - [main.py configuration](#mainpy-configuration)
   - [Usage](#usage)
@@ -106,52 +114,135 @@ Dependencies in the `requirements.txt` include:
 
 ## Setup
 
-### Clone the repository
+Before running the project, ensure that both **Python** and the **make utility** are installed on your system. Follow the instructions below according to your operating system.
 
-1. Clone the repository with the following command:
+### 1. Install Python
+
+The project requires **Python 3.9 or higher**.
+
+#### Linux
+On Debian/Ubuntu-based distributions:
+
+```bash
+sudo apt update
+sudo apt install python3 python3-venv python3-pip -y
+```
+
+On Fedora/RHEL-based distributions:
+
+```bash
+sudo dnf install python3 python3-venv python3-pip -y
+```
+
+Verify installation:
+
+```bash
+python3 --version
+```
+
+#### macOS
+1. Install via Homebrew (recommended):
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" # if Homebrew not installed
+brew install python
+```
+
+2. Verify installation:
+
+```bash
+python3 --version
+```
+
+#### Windows
+1. Download Python from the official website: [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
+2. Run the installer and check **“Add Python to PATH”**.
+3. Verify installation:
+
+```powershell
+python --version
+```
+
+---
+
+### 2. Install `make` utility
+
+The `make` utility is used to automate tasks such as setting up the virtual environment and installing dependencies.
+
+#### Linux
+`make` is usually pre-installed. If not:
+
+```bash
+sudo apt install build-essential -y  # Debian/Ubuntu
+sudo dnf install make -y            # Fedora/RHEL
+make --version
+```
+
+#### macOS
+`make` comes pre-installed with Xcode Command Line Tools:
+
+```bash
+xcode-select --install
+make --version
+```
+
+#### Windows
+1. Install via [Chocolatey](https://chocolatey.org/):
+
+```powershell
+choco install make
+```
+
+Or, install [GnuWin32 Make](http://gnuwin32.sourceforge.net/packages/make.htm).
+
+2. Verify installation:
+
+```powershell
+make --version
+```
+
+---
+
+### 3. Clone the repository
 
 ```bash
 git clone https://github.com/BrenoFariasDaSilva/GitHub-Activity-Reports-Generator.git
 cd GitHub-Activity-Reports-Generator
 ```
 
-### Virtual environment (strongly recommended)
+### 4. Virtual environment (strongly recommended)
 
 With `make`:
 
 ```bash
 make venv
-source venv/bin/activate # On Linux/macOS
-venv\Scripts\activate # On Windows
+source venv/bin/activate # Linux/macOS
+venv\Scripts\activate # Windows
 ```
 
 Or manually:
 
 ```bash
 python -m venv venv
-source venv/bin/activate # On Linux/macOS
-venv\Scripts\activate # On Windows
+source venv/bin/activate # Linux/macOS
+venv\Scripts\activate # Windows
 ```
 
-### Install dependencies
+### 5. Install dependencies
 
-To generate reports, you’ll need to install **Quarto CLI** and **TinyTeX** (required for PDF output).
-
-1. Install Quarto by following the official instructions: [Quarto Installation Guide](https://quarto.org/docs/get-started/).
-
-Verify that is was installed correctly:
+1. Install **Quarto CLI** (required for report rendering): [Quarto Installation Guide](https://quarto.org/docs/get-started/)  
 
 ```bash
-quarto --version
+quarto --version  # verify installation
 ```
 
-2. Install TinyTeX (a lightweight LaTeX distribution) with Quarto:
+2. Install **TinyTeX** for PDF output:
 
 ```bash
 quarto install tinytex
 ```
 
-Now you need to install the required Python packages.
+3. Install Python packages:
 
 With `make`:
 
@@ -162,14 +253,14 @@ make dependencies
 Or manually:
 
 ```bash
-source venv/bin/activate # On Linux/macOS
-venv\Scripts\activate # On Windows
 pip install -r requirements.txt
 ```
 
-### Environment Variables Configuration
+---
 
-Copy the `.env-example` file in the project root, naming it `.env`:
+### 6. Environment Variables Configuration
+
+Copy the `.env-example` file and rename it `.env`. Edit it with your GitHub credentials and repositories. For full details, see the [Environment Variables Configuration](#environment-variables-configuration) section above.
 
 #### Full list of environment variables
 
