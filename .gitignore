@@ -25,6 +25,11 @@ desktop.ini
 *.xlsx
 *.txt
 *.pdf
+*.docx
+*.doc
+*.json
+*.xml
+*.html
 
 # But keep requirements.txt tracked
 !requirements.txt
