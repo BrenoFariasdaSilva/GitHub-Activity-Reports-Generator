@@ -1,7 +1,21 @@
 # Variables
 VENV := venv
-PYTHON := $(VENV)/bin/python3
-PIP := $(VENV)/bin/pip
+OS := $(shell uname 2>/dev/null || echo Windows)
+
+# Detect correct Python and Pip commands based on OS
+ifeq ($(OS), Windows)
+	PYTHON := $(VENV)/Scripts/python.exe
+	PIP := $(VENV)/Scripts/pip.exe
+	PYTHON_CMD := $(VENV)/Scripts/python.exe
+	CLEAR_CMD := cls
+	TIME_CMD :=
+else
+	PYTHON := $(VENV)/bin/python3
+	PIP := $(VENV)/bin/pip
+	PYTHON_CMD := $(VENV)/bin/python
+	CLEAR_CMD := clear
+	TIME_CMD := time
+endif
 
 # Default date range (can be overridden from CLI)
 SINCE ?= 2000-01-01
@@ -12,11 +26,12 @@ all: run
 
 # Main Scripts:
 run: $(VENV)
-	time $(PYTHON) ./main.py --since $(SINCE) --until $(UNTIL)
+	$(CLEAR_CMD)
+	$(TIME_CMD) $(PYTHON_CMD) ./main.py --since $(SINCE) --until $(UNTIL)
 
 # Setup Virtual Environment and Install Dependencies
 $(VENV):
-	python3 -m venv $(VENV)
+	$(PYTHON) -m venv $(VENV)
 	$(PIP) install -r requirements.txt
 
 # Install the project dependencies
@@ -28,8 +43,8 @@ generate_requirements: $(VENV)
 
 # Utility rule for cleaning the project
 clean:
-	rm -rf $(VENV)
-	find . -type f -name '*.pyc' -delete
-	find . -type d -name '__pycache__' -delete
+	rm -rf $(VENV) || rmdir /S /Q $(VENV) 2>nul
+	find . -type f -name '*.pyc' -delete || del /S /Q *.pyc 2>nul
+	find . -type d -name '__pycache__' -delete || rmdir /S /Q __pycache__ 2>nul
 
-.PHONY: run clean dependencies generate_requirements
+.PHONY: all run clean dependencies generate_requirements
