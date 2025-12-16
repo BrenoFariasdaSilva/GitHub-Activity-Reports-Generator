@@ -28,7 +28,7 @@ DEFAULT_END = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") # 
 
 # Execution Constants
 SAVE_JSONS = True # Set to False to skip saving JSON responses
-VERBOSE = False # Set to True to print detailed messages
+VERBOSE = True # Set to True to print detailed messages
 
 # Environment variables
 load_dotenv() # Load .env variables
@@ -42,9 +42,10 @@ TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub A
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
 USER_MAP_ONLY = os.getenv("USER_MAP_ONLY", "false").lower() == "true"
 try: # Load USER_MAP from environment variable
-   USER_MAP = json.loads(os.getenv("USER_MAP", "{}")) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
-except json.JSONDecodeError: # On JSON error
-   print("Warning: Invalid JSON in USER_MAP environment variable. Using empty dict.")
+   user_map_str = os.getenv("USER_MAP", "{}") # Get USER_MAP string
+   USER_MAP = json.loads(user_map_str) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
+except json.JSONDecodeError as e: # On JSON error
+   print(f"Warning: Invalid JSON in USER_MAP environment variable: {e}. Using empty dict.")
    USER_MAP = {} # Fallback to empty dict
 HEADERS = {"Authorization": f"token {TOKEN}"} # GitHub API headers (add preview Accept headers when needed)
 
