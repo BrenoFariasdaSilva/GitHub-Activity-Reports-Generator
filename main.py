@@ -189,7 +189,7 @@ def search_issues_by_field(repo: str, field: str, since_str: str, until_str: str
       response.raise_for_status() # Raise error if bad response
 
       data = response.json() # Parse JSON
-      save_json(data, f"./responses/search_issues_{field}_{page}.json") if SAVE_JSONS else None # Save search page if enabled
+      save_json(data, f"./responses/{repo}/search_issues_{field}_{page}.json") if SAVE_JSONS else None # Save search page if enabled
 
       page_items = data.get("items", []) # Get items
 
@@ -219,7 +219,7 @@ def fetch_issue(repo: str, issue_number: int):
    response.raise_for_status() # Raise error if bad response
 
    data = response.json() # Parse JSON
-   save_json(data, f"./responses/issue_{issue_number}.json") if SAVE_JSONS else None # Save issue data if enabled
+   save_json(data, f"./responses/{repo}/issue_{issue_number}.json") if SAVE_JSONS else None # Save issue data if enabled
 
    return data # Return issue data
 
@@ -284,7 +284,7 @@ def fetch_sub_issues(repo: str, issue_number: int):
    response = requests.post(url, headers=HEADERS, json={"query": query, "variables": variables}) # Make request
    response.raise_for_status() # Raise error if bad response
    data = response.json() # Parse JSON
-   save_json(data, f"./responses/sub_issues_{issue_number}.json") if SAVE_JSONS else None # Save sub-issues data if enabled
+   save_json(data, f"./responses/{repo}/sub_issues_{issue_number}.json") if SAVE_JSONS else None # Save sub-issues data if enabled
 
    nodes = data.get("data", {}).get("repository", {}).get("issue", {}).get("trackedIssues", {}).get("nodes", []) or [] # Get sub-issue nodes
    detailed = [] # Detailed sub-issues
@@ -313,7 +313,7 @@ def fetch_prs_from_timeline(repo: str, issue_number: int):
    response = requests.get(url, headers=headers) # Make request
    response.raise_for_status() # Raise error if bad response
    data = response.json() # Parse JSON
-   save_json(data, f"./responses/issue_{issue_number}_timeline.json") if SAVE_JSONS else None # Save timeline data if enabled
+   save_json(data, f"./responses/{repo}/issue_{issue_number}_timeline.json") if SAVE_JSONS else None # Save timeline data if enabled
 
    prs = [] # Collected PR numbers
    for e in data: # Iterate over timeline events
@@ -340,7 +340,7 @@ def fetch_commits_from_pr(repo: str, pr_number: int):
    response = requests.get(url, headers=HEADERS) # Make request
    response.raise_for_status() # Raise error if bad response
    data = response.json() # Parse JSON
-   save_json(data, f"./responses/pr_{pr_number}_commits.json") if SAVE_JSONS else None # Save PR commits data if enabled
+   save_json(data, f"./responses/{repo}/pr_{pr_number}_commits.json") if SAVE_JSONS else None # Save PR commits data if enabled
    commits = [] # Collected commits
 
    for commit in data: # Iterate over commits
@@ -375,7 +375,7 @@ def fetch_prs_from_search(repo: str, issue_number: int):
       response = requests.get(url, headers=HEADERS) # Make request
       response.raise_for_status() # Raise error if bad response
       data = response.json() # Parse JSON
-      save_json(data, f"./responses/issue_{issue_number}_prs_search_page_{page}.json") if SAVE_JSONS else None # Save search page if enabled
+      save_json(data, f"./responses/{repo}/issue_{issue_number}_prs_search_page_{page}.json") if SAVE_JSONS else None # Save search page if enabled
 
       items = data.get("items", []) # Get items
       for item in items: # Iterate over items
@@ -409,7 +409,7 @@ def fetch_repo_commits_in_range(repo: str, start: dt.datetime, end: dt.datetime)
       response = requests.get(url, headers=HEADERS) # Make request
       response.raise_for_status() # Raise error if bad response
       data = response.json() # Parse JSON
-      save_json(data, f"./responses/repo_commits_page_{page}.json") if SAVE_JSONS else None # Save commits page if enabled
+      save_json(data, f"./responses/{repo}/repo_commits_page_{page}.json") if SAVE_JSONS else None # Save commits page if enabled
 
       if not data: # If no data, we're done
          break # Exit loop
@@ -449,7 +449,7 @@ def fetch_commits_search(repo: str, issue_number: int, start: dt.datetime, end: 
       if f"#{issue_number}" in (commit.get("msg") or "") # Verify if issue number is in message
    ]
 
-   save_json(commits, f"./responses/issue_{issue_number}_commits_filtered.json") if SAVE_JSONS else None # Save filtered commits if enabled
+   save_json(commits, f"./responses/{repo}/issue_{issue_number}_commits_filtered.json") if SAVE_JSONS else None # Save filtered commits if enabled
 
    return commits # Return filtered commits
 
