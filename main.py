@@ -759,6 +759,16 @@ def main():
 
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}GitHub Activity Reports Generator{BackgroundColors.GREEN}.{Style.RESET_ALL}\n")
 
+   print(f"Repositories to process for owner '{OWNER}':") # Print owner
+   for org, repos in REPOS.items(): # Iterate over organizations and repos
+      print(f"  Organization/User: {org}") # Print organization/user
+      for repo in repos: # Iterate over repos
+         print(f"    - Repository: {repo}") # Print repository name
+
+   print(f"User map (total {len(USER_MAP)} entries):") # Print user map
+   for full_name, usernames in USER_MAP.items(): # Iterate over user map
+      print(f"  - {full_name}: {', '.join(usernames)}") # Print full name and usernames
+
    parser = argparse.ArgumentParser(description="GitHub Activity Reports Generator (date range).") # Argument parser
    parser.add_argument("--since", type=str, help="Start date (YYYY-MM-DD or ISO).") # Start date argument
    parser.add_argument("--until", type=str, help="End date (YYYY-MM-DD or ISO).") # End date argument
