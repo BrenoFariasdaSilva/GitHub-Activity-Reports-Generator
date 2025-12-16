@@ -15,29 +15,37 @@ import datetime as dt # For date handling
 import json # For handling JSON responses
 import os # For running commands and file operations
 import platform # For detecting the OS
+import pytz # For timezone handling
 import requests # For making HTTP requests
 import shutil # For file operations
 import subprocess # For running commands
 from colorama import Style # For coloring terminal output
 from dotenv import load_dotenv # For loading environment variables
-from zoneinfo import ZoneInfo # For timezone handling
 
 # Macros and constants
 DEFAULT_START = "2020-01-01T00:00:00Z" # Start date (ISO format)
 DEFAULT_END = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") # End date (now in UTC)
 
 # Execution Constants
-SAVE_JSONS = False # Set to False to skip saving JSON responses
+SAVE_JSONS = True # Set to False to skip saving JSON responses
 VERBOSE = False # Set to True to print detailed messages
 
 # Environment variables
 load_dotenv() # Load .env variables
 OWNER = os.getenv("OWNER", "") # GitHub organization or user
-REPOS = json.loads(os.getenv("REPOS", "{}")) # Example: {"org1": ["repo1", "repo2"], "org2": ["repo3"]}
+try: # Load REPOS from environment variable
+   REPOS = json.loads(os.getenv("REPOS", "{}")) # Example: {"org1": ["repo1", "repo2"], "org2": ["repo3"]}
+except json.JSONDecodeError: # On JSON error
+   print("Warning: Invalid JSON in REPOS environment variable. Using empty dict.")
+   REPOS = {} # Fallback to empty dict
 TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub API with repo scope (https://github.com/settings/tokens)
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
 USER_MAP_ONLY = os.getenv("USER_MAP_ONLY", "false").lower() == "true"
-USER_MAP = json.loads(os.getenv("USER_MAP", "{}")) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
+try: # Load USER_MAP from environment variable
+   USER_MAP = json.loads(os.getenv("USER_MAP", "{}")) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
+except json.JSONDecodeError: # On JSON error
+   print("Warning: Invalid JSON in USER_MAP environment variable. Using empty dict.")
+   USER_MAP = {} # Fallback to empty dict
 HEADERS = {"Authorization": f"token {TOKEN}"} # GitHub API headers (add preview Accept headers when needed)
 
 class BackgroundColors: # For colored terminal output
@@ -73,15 +81,17 @@ def parse_date_input(s: str, default_time_start: bool = True) -> dt.datetime:
       raise ValueError("Date string is required")
 
    s = s.strip() # Trim whitespace
-   tz_sp = ZoneInfo("America/Sao_Paulo") # São Paulo timezone
+   tz_sp = pytz.timezone("America/Sao_Paulo") # São Paulo timezone
 
    try: # Try parsing the string
       if len(s) == 10 and s.count("-") == 2: # If only date part is given
          d = dt.datetime.strptime(s, "%Y-%m-%d") # Parse date
          if default_time_start: # If start of day
-            return dt.datetime.combine(d.date(), dt.time.min, tzinfo=tz_sp) # 00:00:00
+            naive = dt.datetime.combine(d.date(), dt.time.min)
+            return tz_sp.localize(naive) # 00:00:00
          else: # If end of day
-            return dt.datetime.combine(d.date(), dt.time.max, tzinfo=tz_sp) # 23:59:59
+            naive = dt.datetime.combine(d.date(), dt.time.max)
+            return tz_sp.localize(naive) # 23:59:59
 
       if s.endswith("Z"): # If ends with Z (UTC)
          s2 = s[:-1] + "+00:00" # Replace Z with +00:00
@@ -90,7 +100,7 @@ def parse_date_input(s: str, default_time_start: bool = True) -> dt.datetime:
 
       d = dt.datetime.fromisoformat(s) # Try parsing full ISO
       if d.tzinfo is None: # If no timezone info
-         return d.replace(tzinfo=tz_sp) # Assume São Paulo
+         return tz_sp.localize(d) # Localize to São Paulo
       else: # If has timezone info
          return d.astimezone(tz_sp) # Convert to São Paulo
 
@@ -106,10 +116,10 @@ def to_github_time_string(d: dt.datetime) -> str:
    :return: Formatted string
    """
 
-   tz_sp = ZoneInfo("America/Sao_Paulo") # São Paulo timezone
+   tz_sp = pytz.timezone("America/Sao_Paulo") # São Paulo timezone
 
    if d.tzinfo is None: # If naive datetime
-      d = d.replace(tzinfo=tz_sp) # Assume naive datetime -> localize to São Paulo
+      d = tz_sp.localize(d) # Localize to São Paulo
    else: # If has timezone info
       d = d.astimezone(tz_sp) # Convert to São Paulo
 
