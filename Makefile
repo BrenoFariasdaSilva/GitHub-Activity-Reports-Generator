@@ -3,45 +3,50 @@ VENV := venv
 OS := $(shell uname 2>/dev/null || echo Windows)
 
 # Detect correct Python and Pip commands based on OS
-ifeq ($(OS), Windows)
+ifeq ($(OS), Windows) # Windows
 	PYTHON := $(VENV)/Scripts/python.exe
 	PIP := $(VENV)/Scripts/pip.exe
-	PYTHON_CMD := $(VENV)/Scripts/python.exe
+	PYTHON_CMD := python
 	CLEAR_CMD := cls
 	TIME_CMD :=
-else
+else # Unix-like
 	PYTHON := $(VENV)/bin/python3
 	PIP := $(VENV)/bin/pip
-	PYTHON_CMD := $(VENV)/bin/python
+	PYTHON_CMD := python3
 	CLEAR_CMD := clear
 	TIME_CMD := time
 endif
 
 # Default date range (can be overridden from CLI)
 SINCE ?= 2000-01-01
+ifeq ($(OS), Windows)
+UNTIL ?= $(shell powershell -command "Get-Date -Format 'yyyy-MM-dd'")
+else
 UNTIL ?= $(shell date +%Y-%m-%d)
+endif
 
 # Main target that runs the scripts
 all: run
 
 # Main Scripts:
-run: $(VENV)
+run: dependencies
 	$(CLEAR_CMD)
-	$(TIME_CMD) $(PYTHON_CMD) ./main.py --since $(SINCE) --until $(UNTIL)
+	$(TIME_CMD) $(PYTHON) ./main.py --since $(SINCE) --until $(UNTIL)
 
-# Setup Virtual Environment and Install Dependencies
+# Create virtual environment if missing
 $(VENV):
-	$(PYTHON) -m venv $(VENV)
-	$(PIP) install -r requirements.txt
+	@echo "Creating virtual environment..."
+	$(PYTHON_CMD) -m venv $(VENV)
 
-# Install the project dependencies
 dependencies: $(VENV)
+	@echo "Installing/Updating Python dependencies..."
+	$(PIP) install --upgrade -r requirements.txt
 
-# Generate requirements.txt from the current venv
+# Generate requirements.txt from current venv
 generate_requirements: $(VENV)
 	$(PIP) freeze > requirements.txt
 
-# Utility rule for cleaning the project
+# Clean artifacts
 clean:
 	rm -rf $(VENV) || rmdir /S /Q $(VENV) 2>nul
 	find . -type f -name '*.pyc' -delete || del /S /Q *.pyc 2>nul
