@@ -1,6 +1,6 @@
 <div align="center">
   
-# [GitHub-Activity-Reports-Generator.](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator) <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg"  width="3%" height="3%">
+# [GitHub-Activity-Reports-Generator.](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator) <img src="https://github.com/BrenoFariasdaSilva.png"  width="3%" height="3%">
 
 </div>
 
@@ -406,7 +406,7 @@ We thank the following people who contributed to this project:
   <tr>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/blob/main/.assets/Images/Github.svg" width="100px;" alt="My Profile Picture"/><br>
+        <img src="https://github.com/BrenoFariasdaSilva.png" width="100px;" alt="My Profile Picture"/><br>
         <sub>
           <b>Breno Farias da Silva</b>
         </sub>
