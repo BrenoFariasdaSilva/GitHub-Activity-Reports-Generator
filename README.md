@@ -292,8 +292,7 @@ Lastly, there is the user mapping configuration, to map GitHub usernames to real
 # If false, generate reports for all contributors
 USER_MAP_ONLY=true
 
-# If true, also generate one chronological report with all project activity
-# If USER_MAP_ONLY is true, the general report shows authors; otherwise, it omits authors
+# If true, also generate two chronological reports: one with authors and one without authors
 CREATE_GENERAL_REPORT=true
 
 # Dictionary with canonical names and their possible variations (JSON string, optional but recommended)
@@ -338,7 +337,7 @@ After running the project, you will obtain:
 
 - **Raw data** → JSON files with issues, PRs, and commits from the configured repositories, stored in the `responses/` folder.  
 - **Per-author reports** → Contributions grouped by author (based on `USER_MAP`) within the selected date range. Reports are generated as Quarto `.qmd` files and automatically rendered into **PDF** and **DOCX** formats inside the `reports/` directory.  
-- **General report** → When `CREATE_GENERAL_REPORT=true`, one chronological project report is generated inside `reports/YYYY-MM-DD_YYYY-MM-DD/general/`.  
+- **General reports** → When `CREATE_GENERAL_REPORT=true`, two chronological project reports are generated: one inside `reports/YYYY-MM-DD_YYYY-MM-DD/general_with_authors/` and another inside `reports/YYYY-MM-DD_YYYY-MM-DD/general_without_authors/`.  
 - **Traceability** → Clear tracking of how many issues, PRs, and commits were authored by each contributor.  
 - **Navigation** → Hyperlinked references to GitHub issues, PRs, and commits for quick access back to the platform.  
 
