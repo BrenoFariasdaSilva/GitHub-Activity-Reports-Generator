@@ -573,12 +573,12 @@ def event_date(value: str):
       return dt.datetime.max.replace(tzinfo=dt.timezone.utc)
    return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
 
-def author_text(obj):
+def author_text(obj, show_authors):
    """
-   Return formatted author text only when the general report should show authors.
+   Return formatted author text for general reports.
    """
 
-   return f" - Autor: {get_author_name(obj)}" if USER_MAP_ONLY else ""
+   return f" - Autor: {get_author_name(obj)}" if show_authors else ""
 
 def save_quarto_markdown_content(content: str, path: str):
    """
@@ -622,7 +622,7 @@ def render_quarto_report(input_file: str, output_formats=["pdf", "docx"]):
       except Exception as e: # On exception
          print(f"{BackgroundColors.RED}Error running Quarto ({file_format}): {e}{Style.RESET_ALL}")
 
-def generate_general_quarto_report(start, end, issues_info, repo_commits, output_formats=["pdf", "docx"]):
+def generate_general_quarto_report(start, end, issues_info, repo_commits, show_authors, output_formats=["pdf", "docx"]):
    """
    Generate one chronological Quarto markdown report with all project activity.
    """
@@ -657,7 +657,8 @@ def generate_general_quarto_report(start, end, issues_info, repo_commits, output
 
    md = ""
    md += "---\n"
-   md += f"title: \"Relatório geral de {OWNER}\"\n"
+   title_suffix = "com autores" if show_authors else "sem autores"
+   md += f"title: \"Relatório geral de {OWNER} ({title_suffix})\"\n"
    md += f"date: {end_s}\n"
    md += f"period: \"{start_s} → {end_s}\"\n"
    md += "format:\n"
@@ -674,7 +675,7 @@ def generate_general_quarto_report(start, end, issues_info, repo_commits, output
       if kind in ("issue", "sub_issue"):
          label = "Issue" if kind == "issue" else "Sub-issue"
          md += f"## {obj.get('created_at', 'unknown')} - {label} #{obj.get('number')}: [{obj.get('title','(no title)')}]({obj.get('html_url')})\n"
-         md += f"- Estado: {obj.get('state')}{author_text(obj)}\n"
+         md += f"- Estado: {obj.get('state')}{author_text(obj, show_authors)}\n"
          md += f"- Atualizado: {obj.get('updated_at')}\n"
          md += f"- URL: [{obj.get('html_url')}]({obj.get('html_url')})\n"
 
@@ -689,12 +690,13 @@ def generate_general_quarto_report(start, end, issues_info, repo_commits, output
          msg = (obj.get("msg") or "").splitlines()[0]
          url = obj.get("url", "")
          md += f"## {obj.get('date', 'unknown')} - Commit `{sha}`\n"
-         md += f"- {msg}{author_text(obj)}\n"
+         md += f"- {msg}{author_text(obj, show_authors)}\n"
          md += f"- URL: [{url}]({url})\n\n"
 
-   reports_dir = f"./reports/{start_s}_{end_s}/general/"
+   report_name = "general_with_authors" if show_authors else "general_without_authors"
+   reports_dir = f"./reports/{start_s}_{end_s}/{report_name}/"
    os.makedirs(reports_dir, exist_ok=True)
-   filename = f"general_{start_s}_{end_s}.qmd".replace(":", "-")
+   filename = f"{report_name}_{start_s}_{end_s}.qmd".replace(":", "-")
    path = os.path.join(reports_dir, filename)
    save_quarto_markdown_content(md, path)
 
@@ -901,7 +903,8 @@ def main():
          all_repo_commits.extend(repo_commits) # Add to collected commits
 
    if CREATE_GENERAL_REPORT: # Generate one chronological report with all activity
-      generate_general_quarto_report(since_dt, until_dt, all_issues_info, all_repo_commits, output_formats=["pdf", "docx"])
+      generate_general_quarto_report(since_dt, until_dt, all_issues_info, all_repo_commits, show_authors=True, output_formats=["pdf", "docx"])
+      generate_general_quarto_report(since_dt, until_dt, all_issues_info, all_repo_commits, show_authors=False, output_formats=["pdf", "docx"])
 
    generate_quarto_report_per_author(since_dt, until_dt, all_issues_info, all_repo_commits, output_formats=["pdf", "docx"]) # 4 - Generate Quarto reports
    
