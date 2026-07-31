@@ -580,6 +580,14 @@ def author_text(obj, show_authors):
 
    return f" - Autor: {get_author_name(obj)}" if show_authors else ""
 
+def commit_message_title(commit):
+   """
+   Return the first commit message line or a safe fallback.
+   """
+
+   lines = (commit.get("msg") or "").splitlines()
+   return lines[0] if lines else "(sem mensagem)"
+
 def save_quarto_markdown_content(content: str, path: str):
    """
    Save markdown content to a .qmd file.
@@ -687,7 +695,7 @@ def generate_general_quarto_report(start, end, issues_info, repo_commits, show_a
          md += "\n"
       else:
          sha = obj.get("sha", "")[:7]
-         msg = (obj.get("msg") or "").splitlines()[0]
+         msg = commit_message_title(obj)
          url = obj.get("url", "")
          md += f"## {obj.get('date', 'unknown')} - Commit `{sha}`\n"
          md += f"- {msg}{author_text(obj, show_authors)}\n"
@@ -783,7 +791,7 @@ def generate_quarto_report_per_author(start, end, issues_info, repo_commits, out
             md += "### Commits relacionados a esta issue\n" # Commits header
             for commit in commits: # Iterate over commits
                sha = commit.get("sha", "")[:7] # Short SHA
-               msg = (commit.get("msg") or "").splitlines()[0] # First line of message
+               msg = commit_message_title(commit) # First line of message
                date = commit.get("date", "unknown") # Commit date
                url = commit.get("url", "") # Commit URL
                md += f"- `{sha}` {msg} ({date}) [{url}]({url})\n" # Commit line
@@ -794,7 +802,7 @@ def generate_quarto_report_per_author(start, end, issues_info, repo_commits, out
          rc_dedup = dedupe_commits(data["commits"]) # Deduplicate commits
          for commit in rc_dedup: # Iterate over commits
             sha = commit.get("sha", "")[:7] # Short SHA
-            msg = (commit.get("msg") or "").splitlines()[0] # First line of message
+            msg = commit_message_title(commit) # First line of message
             date = commit.get("date", "unknown") # Commit date
             url = commit.get("url", "") # Commit URL
             md += f"- `{sha}` {msg} ({date}) [{url}]({url})\n" # Commit line
