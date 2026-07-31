@@ -41,6 +41,7 @@ except json.JSONDecodeError: # On JSON error
 TOKEN = os.getenv("GITHUB_CLASSIC_TOKEN") # Works only with the Classic GitHub API with repo scope (https://github.com/settings/tokens)
 REPOS = {org: sorted(repos) for org, repos in sorted(REPOS.items())} # Sort repositories alphabetically within each organization
 USER_MAP_ONLY = os.getenv("USER_MAP_ONLY", "false").lower() == "true"
+CREATE_GENERAL_REPORT = os.getenv("CREATE_GENERAL_REPORT", "false").lower() == "true"
 try: # Load USER_MAP from environment variable
    user_map_str = os.getenv("USER_MAP", "{}") # Get USER_MAP string
    USER_MAP = json.loads(user_map_str) # Example: {"Full Name": ["github_username1", "full_name_with_underscores"]}
@@ -563,6 +564,22 @@ def dedupe_commits(commits_list):
       
    return deduped # Return deduplicated commits
 
+def event_date(value: str):
+   """
+   Parse GitHub date strings for chronological report sorting.
+   """
+
+   if not value:
+      return dt.datetime.max.replace(tzinfo=dt.timezone.utc)
+   return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+def author_text(obj):
+   """
+   Return formatted author text only when the general report should show authors.
+   """
+
+   return f" - Autor: {get_author_name(obj)}" if USER_MAP_ONLY else ""
+
 def save_quarto_markdown_content(content: str, path: str):
    """
    Save markdown content to a .qmd file.
@@ -604,6 +621,87 @@ def render_quarto_report(input_file: str, output_formats=["pdf", "docx"]):
             verbose_output(f"{BackgroundColors.GREEN}Quarto rendering succeeded ({file_format}){Style.RESET_ALL}") # Success message
       except Exception as e: # On exception
          print(f"{BackgroundColors.RED}Error running Quarto ({file_format}): {e}{Style.RESET_ALL}")
+
+def generate_general_quarto_report(start, end, issues_info, repo_commits, output_formats=["pdf", "docx"]):
+   """
+   Generate one chronological Quarto markdown report with all project activity.
+   """
+
+   start_s = start.strftime("%Y-%m-%d")
+   end_s = end.strftime("%Y-%m-%d")
+   events = []
+   commits = []
+   seen_issues = set()
+
+   for info in issues_info:
+      issue = info["issue"]
+      issue_key = issue.get("html_url") or issue.get("number")
+      if issue_key not in seen_issues:
+         seen_issues.add(issue_key)
+         events.append((event_date(issue.get("created_at")), "issue", issue, info))
+
+      for sub_issue in info.get("sub_issues", []):
+         sub_issue_key = sub_issue.get("html_url") or sub_issue.get("number")
+         if sub_issue_key not in seen_issues:
+            seen_issues.add(sub_issue_key)
+            events.append((event_date(sub_issue.get("created_at")), "sub_issue", sub_issue, info))
+
+      commits.extend(info.get("commits", []))
+
+   commits.extend(repo_commits)
+
+   for commit in dedupe_commits(commits):
+      events.append((event_date(commit.get("date")), "commit", commit, None))
+
+   events.sort(key=lambda event: event[0])
+
+   md = ""
+   md += "---\n"
+   md += f"title: \"Relatório geral de {OWNER}\"\n"
+   md += f"date: {end_s}\n"
+   md += f"period: \"{start_s} → {end_s}\"\n"
+   md += "format:\n"
+   for fmt in output_formats:
+      md += f"   {fmt}: default\n"
+   md += "---\n\n"
+
+   md += f"**Período:** {start_s} → {end_s}\n\n"
+   md += "**Repositórios:** " + ", ".join([f"[{repo}](https://github.com/{OWNER}/{repo})" for org, repos in REPOS.items() for repo in repos]) + "\n\n"
+   md += f"- Issues e sub-issues: {sum(1 for event in events if event[1] in ('issue', 'sub_issue'))}\n"
+   md += f"- Commits: {sum(1 for event in events if event[1] == 'commit')}\n\n"
+
+   for _, kind, obj, info in events:
+      if kind in ("issue", "sub_issue"):
+         label = "Issue" if kind == "issue" else "Sub-issue"
+         md += f"## {obj.get('created_at', 'unknown')} - {label} #{obj.get('number')}: [{obj.get('title','(no title)')}]({obj.get('html_url')})\n"
+         md += f"- Estado: {obj.get('state')}{author_text(obj)}\n"
+         md += f"- Atualizado: {obj.get('updated_at')}\n"
+         md += f"- URL: [{obj.get('html_url')}]({obj.get('html_url')})\n"
+
+         if kind == "issue" and info and info.get("pr_numbers"):
+            repo_url = obj.get("repository_url", "")
+            repo_name = repo_url.split("/")[-1] if repo_url else repo_url
+            md += "- PRs relacionados: " + ", ".join([f"[#{prn}](https://github.com/{OWNER}/{repo_name}/pull/{prn})" for prn in sorted(info["pr_numbers"])]) + "\n"
+
+         md += "\n"
+      else:
+         sha = obj.get("sha", "")[:7]
+         msg = (obj.get("msg") or "").splitlines()[0]
+         url = obj.get("url", "")
+         md += f"## {obj.get('date', 'unknown')} - Commit `{sha}`\n"
+         md += f"- {msg}{author_text(obj)}\n"
+         md += f"- URL: [{url}]({url})\n\n"
+
+   reports_dir = f"./reports/{start_s}_{end_s}/general/"
+   os.makedirs(reports_dir, exist_ok=True)
+   filename = f"general_{start_s}_{end_s}.qmd".replace(":", "-")
+   path = os.path.join(reports_dir, filename)
+   save_quarto_markdown_content(md, path)
+
+   render_quarto_report(path, output_formats) if output_formats else None
+
+   verbose_output(f"Generated general Quarto report → {path}")
+   return md
 
 def generate_quarto_report_per_author(start, end, issues_info, repo_commits, output_formats=["pdf", "docx"]):
    """
@@ -801,6 +899,9 @@ def main():
 
          repo_commits = fetch_repo_commits_in_range(repo, since_dt, until_dt) # 3 - Fetch repo commits in date range
          all_repo_commits.extend(repo_commits) # Add to collected commits
+
+   if CREATE_GENERAL_REPORT: # Generate one chronological report with all activity
+      generate_general_quarto_report(since_dt, until_dt, all_issues_info, all_repo_commits, output_formats=["pdf", "docx"])
 
    generate_quarto_report_per_author(since_dt, until_dt, all_issues_info, all_repo_commits, output_formats=["pdf", "docx"]) # 4 - Generate Quarto reports
    
