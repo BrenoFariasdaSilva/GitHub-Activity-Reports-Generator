@@ -29,10 +29,32 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
 </div>
 
 <div align="center">
-  
-![RepoBeats Statistics](https://repobeats.axiom.co/api/embed/85ae4e5b591ce5aebee352186f43f84ec68519b8.svg "Repobeats analytics image")
+
+![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Commits](https://img.shields.io/github/commit-activity/t/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/main)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Forks](https://img.shields.io/github/forks/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Language Count](https://img.shields.io/github/languages/count/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub License](https://img.shields.io/github/license/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![GitHub Stars](https://img.shields.io/github/stars/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator.svg)
+[![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/graphs/contributors)
+[![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+[![GitHub Repository Size](https://img.shields.io/github/repo-size/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
+[![Open Issues](https://img.shields.io/github/issues/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/issues)
+[![Closed Issues](https://img.shields.io/github/issues-closed/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/issues?q=is%3Aissue+is%3Aclosed)
+[![Open Pull Requests](https://img.shields.io/github/issues-pr/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/pulls)
+[![Closed Pull Requests](https://img.shields.io/github/issues-pr-closed/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/pulls?q=is%3Apr+is%3Aclosed)
+[![Monthly Commits](https://img.shields.io/github/commit-activity/m/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/main)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/commits)
+[![Merged PRs](https://img.shields.io/github/issues-search/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator?query=is%3Apr%20is%3Amerged&label=merged%20PRs&color=blue)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/pulls?q=is%3Apr+is%3Amerged)
+![Language](https://img.shields.io/badge/Language-Python-3776AB)
+![Reports](https://img.shields.io/badge/Reports-Quarto-4e72b8)
+![Exports](https://img.shields.io/badge/Exports-PDF%20and%20DOCX-39836d)
+
+![Repobeats Statistics](https://repobeats.axiom.co/api/embed/85ae4e5b591ce5aebee352186f43f84ec68519b8.svg)
 
 </div>
+
 
 ## Table of Contents
 - [GitHub-Activity-Reports-Generator. ](#github-activity-reports-generator-)
