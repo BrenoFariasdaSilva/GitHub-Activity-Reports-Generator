@@ -27,7 +27,6 @@ It saves raw JSON responses to `./responses/` and generates **Quarto Markdown re
 ![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator.svg)
 [![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/graphs/contributors)
 [![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
-[![GitHub Repository Size](https://img.shields.io/github/repo-size/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)
 [![Open Issues](https://img.shields.io/github/issues/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/issues?q=is%3Aissue+is%3Aclosed)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator)](https://github.com/BrenoFariasdaSilva/GitHub-Activity-Reports-Generator/pulls)
